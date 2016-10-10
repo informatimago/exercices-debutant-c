@@ -1,0 +1,133 @@
+-*- mode:org;coding:utf-8 -*-
+* Exercices de programmation
+
+Vous pouvez écrire votre solution dans les sous-répertoires de src/.
+Des solutions sont proposées dans les sous-répertoires de solutions/.
+
+** Saisons                                                    :alternative:X:
+
+Définir une fonction retournant un caractère suivant la saison, selon la table:
+
+| Saison    | Caractère | Description       |
+|-----------+-----------+-------------------|
+| Hiver     | '*'       | (flocon de neige) |
+| Printemps | '&'       | (bourgeon)        |
+| Été       | '@'       | (soleil)          |
+| Automne   | '%'       | (raisin).         |
+
+Cette fonction prend en argument le numéro du mois (1 a 12), et le
+numéro du jour (1 a 31).
+
+On peut supposer que le changement de saison se fait toujours du 20 au
+21 du mois.
+
+** Batons                                                        :tableaux:X:
+
+https://programmingpraxis.com/2016/10/07/sticks/
+
+On donne un paquet de batons, chacun d'une longueur entière.  Deux
+batons peuvent être combiné en un seul baton plus long, par un
+processus qui coûte la somme des longueurs des deux batons.  Votre but
+est construire un seul baton, en combinant tous les batons originaux,
+à un coût minimal.
+
+Par exemple, supposons que vous ayez initialement trois batons de
+longueurs 1, 2 et 4.  En combinant 2 et 4 à un coût de 6, puis en
+combinant le baton résultant au baton de 1 à un coût de 7, ça donne un
+coût total de 13.  Mais ce serait mieux de combiner d'abord les batons
+1 et 2 à un coût de 3, puis de combiner ce résultat avec le baton de 4
+à un coût de 7, pour un coût total de 10.
+
+Votre tâche est d'écrire un programme qui combine un paquet de batons
+à un coût minimum.
+
+*** Indice
+
+man 3 qsort
+
+** reverse-file                                                  :fichier:XX:
+
+Écrire un filtre qui lit des lignes de texte de stdin, et les écrit
+sur stdout dans l'ordre inverse: la première ligne est écrite en
+dernier, et la dernière ligne est écrite en premier.
+
+Ce programme doit fonctionner avec des lignes jusqu'à 4095 octets de
+long, y inclu le terminateur de ligne.
+(S'il y a des lignes plus longues, afficher un message d'erreur, et
+arrêter avec un status EX_DATA).
+
+Ce programme doit fonctionner avec des flôts d'entrée de taille
+jusqu'à 64 GB (ie. qui peuvent être beaucoup plus grands que la taille
+de RAM disponible).
+
+
+*** Example
+
+% export LC_ALL=en_US.UTF-8
+% reverse-lines  <<EOF
+Bonjour, c'est l'été !
+Comment ça va ?
+Привет!
+EOF
+Привет!
+Comment ça va ?
+Bonjour, c'est l'été !
+%
+
+*** Indice
+
+La taille du flôt d'entrée peut être supérieure à la mémoire
+disponible.
+
+Il faudra écrire deux algorithmes:
+- le premier, capable de travailler avec un tampon en mémoire,
+  suffisant pour les petits flôts d'entrée.
+- le second, qui s'activera quand le flôt d'entrée s'avèrera trop
+  grand, qui utilisera un ou plusieurs fichiers temporaires (jusqu'à
+  64 GB de fichier temporaire en tout).
+
+** reverse-lines                                       :encodage:fichier:XXX:
+
+Écrire un filtre qui lit des lignes de stdin, et qui les écrits sur
+stdout en les inversant (en écrivant le premier caractère de la ligne
+en dernier, et le dernier caractère de la ligne en premier).
+
+Ce programme doit fonctionner avec des lignes jusqu'à 4095 octets de
+long, y inclu le terminateur de ligne.  (S'il y a des lignes plus
+longues, afficher un message d'erreur, et arrêter avec un status
+EX_DATA).
+
+Ce programme doit fonctioner avec des flôts d'entrée de taille illimitée.
+
+
+Écrire une première version, nommée reverse-line-by-byte, qui
+travaille avec des char (ou unsigned char), en inversant la ligne
+octet par octet.
+
+Le tester sur le fichier
+1- write reverse-line-byte       with char (or unsigned char), reversing the line byte-by-byte.
+2- test it on example.txt.
+3- write reverse-line-character with multibyte, reversing the line wchar_t by wchar_t.
+4- compare the results obtained by reverse-line-byte and reverse-line-character.
+
+For reverse-line-character, the encoding of the characters in the line
+will be specified by the locale, thru the environment variables
+LC_CTYPE (or by default LC_ALL).
+
+
+*** Example
+
+% export LC_ALL=en_US.UTF-8
+% reverse-lines-by-character  <<EOF
+Bonjour, c'est l'été !
+Comment ça va ?
+Привет!
+EOF
+! été'l tse'c ,ruojnoB
+? av aç tnemmoC
+!тевирП
+%
+*** Hint
+
+man 3 multibyte
+
