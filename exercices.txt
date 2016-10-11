@@ -97,22 +97,37 @@ long, y inclu le terminateur de ligne.  (S'il y a des lignes plus
 longues, afficher un message d'erreur, et arrêter avec un status
 EX_DATA).
 
-Ce programme doit fonctioner avec des flôts d'entrée de taille illimitée.
+Ce programme doit fonctionner avec des flôts d'entrée de taille
+illimitée.
 
+*** Première partie                                                      :XX:
 
-Écrire une première version, nommée reverse-line-by-byte, qui
+Écrire une première version, nommée reverse-lines-by-byte, qui
 travaille avec des char (ou unsigned char), en inversant la ligne
 octet par octet.
 
-Le tester sur le fichier
-1- write reverse-line-byte       with char (or unsigned char), reversing the line byte-by-byte.
-2- test it on example.txt.
-3- write reverse-line-character with multibyte, reversing the line wchar_t by wchar_t.
-4- compare the results obtained by reverse-line-byte and reverse-line-character.
+Le tester sur le fichier input.txt (comparer le résultat avec
+expected-result.txt).
 
-For reverse-line-character, the encoding of the characters in the line
-will be specified by the locale, thru the environment variables
-LC_CTYPE (or by default LC_ALL).
+Lire:
+https://fr.wikipedia.org/wiki/UTF-8
+https://fr.wikipedia.org/wiki/Unicode
+
+
+*** Deuxième partie                                                     :XXX:
+
+Faire une copie du programme reverse-lines-by-byte nommée
+reverse-lines-by-character, et la modifier pour effectuer le
+traitement (inversion de l'ordre) caractère par caractère, au lieu de
+procéder octet par octet, après décodage des octets en caractères, et
+avant ré-encodage des caractères en octets.  L'encodage est spécifié
+par les variables d'environnement LC_CTYPE ou à défaut, LC_ALL, via le
+locale(3) (man 3 setlocale).
+
+Visualiser le fichier résultat dans un éditeur unicode.  Noter que
+certains mots ne sont pas rendu correctement lorsqu'ils sont inversés?
+Que se passe-t'il?  Comment pourrions nous procéder pour obtenir un
+meilleur résultat inversé?
 
 
 *** Example
