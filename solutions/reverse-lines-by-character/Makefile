@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-# CFLAGS=-g3 -ggdb 
+# CFLAGS=-g3 -ggdb
 
 all:reverse-lines-by-character
 reverse-lines-by-character:reverse-lines-by-character.c
@@ -16,6 +16,6 @@ clean:
 	-rm -rf *.dSYM *.o result.txt
 
 clean-all:clean
-	-rm -rf reverse-lines-by-character 
+	-rm -rf reverse-lines-by-character
 
 .PHONY: test clean clean-all
