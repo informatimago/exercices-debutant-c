@@ -1,0 +1,744 @@
+-*- coding:iso-8859-1 -*-
+Licence d'Informatique - Section B   Cours du 25/4/88
+Certificat M3 (J-F. Perrot)
+
+
+
+ ==============================================================
+ |                                                            |
+ | L'ALGORITHME DE WANG POUR LE CALCUL DES PROPOSITIONS       |
+ |                                                            |
+ ==============================================================
+
+
+Note historique :
+-----------------
+
+Hao Wang, logicien américain.  L'algorithme en question a été publié en 1960
+dans l'IBM Journal, article intitule "Toward Mechanical Mathematics", avec
+des variantes et une extension au calcul des prédicats.  Il s'agit ici du
+"premier programme" de Wang, systeme "P".
+
+L'article a été écrit en 1958, et les expériences effectuées sur IBM 704 -
+machine à lampes, 32 k mots de 36 bits, celle-là même qui vit naître LISP à
+la même époque.  Le programme a été écrit en assembleur (Fortran existait,
+mais il ne s'était pas encore imposé) et l'auteur estime que "there is very
+little in the program that is not straightforward" .
+
+Il observe que les preuves engendrées sont "essentiellement des arbres", et
+annonce que la machine a démontré 220 theoremes du calcul des propositions
+(tautologies) en 3 minutes.  Il en tire argument pour la superiorité d'une
+approche algorithmique par rapport à une approche heuristique comme celle du
+"Logic Theorist" de Newell, Shaw et Simon (à partir de 1956 sur la machine
+JOHNNIAC de la Rand Corporation) : un débat qui dure encore...
+
+Cet algorithme a été popularisé par J. McCarthy, comme exemple-fanion
+d'application de LISP.  Il figure dans le manuel de la première version de
+LISP (LISP 1, sur IBM 704 justement, le manuel est date de Mars 1960), et il
+a été repris dans le celebre "LISP 1.5 Programmer's Manual" publié en 1962
+par MIT Press, un des maîtres-livres de l'Informatique.
+
+
+Note préliminaire sur les notations :
+-------------------------------------
+
+Nous adoptons ici le système de connecteurs usuel (disjonction, conjonction,
+négation et implication matérielle), en nous inspirant de la syntaxe de PL/I.
+Par ordre de priorité décroissante :
+
+  "~" pour la négation ,
+  "|" pour la disjonction (OU),
+  "&" pour la conjonction (ET),
+  ">" pour l'implication.
+
+Exemple : (a | b) & ~a > b = (((a OU b) ET (NON a)) IMP b)
+
+
+I - SÉQUENCES
+=============
+
+L'algorithme de Wang résulte de l'application au calcul propositionnel d'une
+méthode connue sous le nom de DÉDUCTION NATURELLE.
+
+a) Description
+--------------
+
+Pour démontrer qu'une formule donnée du calcul des propositions est une
+tautologie, on travaille non pas sur des propositions isolées, mais sur des
+SÉQUENCES, de la forme
+
+   " p1, p2,...,pm -> q1, q2,...,qn "
+
+où les pi, qj sont des propositions.  L'ensemble des pi forme l'ANTÉCEDENT de
+la séquence, celui des qj s'appelle son CONSÉQUENT.
+
+Par exemple, avec m=1 et n=2 :
+
+ (~a | (b > c)) -> (a & ~b) , (a > c)
+
+antécédent = {(~a | (b > c))} conséquent = {(a & ~b) , (a > c)}.
+
+L'antécédent et le conséquent étant des ENSEMBLES de propositions, l'ordre
+des pi et des qj est sans signification.  Également, une même proposition
+n'est comptée qu'une seule fois : les pi et les qj sont tous distincts.
+
+Notons que l'un ou l'autre ou les deux peuvent être vides.
+
+
+b) Validité
+-----------
+
+Une séquence s'interprete comme une IMPLICATION
+
+  "(p1 ET p2 ET...ET pm) => (q1 OU q2 OU...OU qn)".
+
+Dans notre exemple :
+
+  (~a | (b > c)) > (a & ~b) | (a > c)
+
+Une telle séquence est VALIDE si l'implication en question est vraie quelque
+soit le système de valeurs des variables, c'est-a-dire si l'implication en
+question, vue comme une proposition unique, est une tautologie.  Nous voici
+ramenés à la case "départ" ... mais en apparence seulement.
+
+Notre exemple était une séquence valide !
+
+
+c) Antécedents et conséquents vides
+-----------------------------------
+
+Rappelons que la conjonction (resp. la disjonction) d'un ensemble vide de
+propositions vaut VRAI (resp. FAUX).  En effet, on généralise la conjonction
+(resp. la disjonction) binaire à des ensembles quelconques en posant que le
+résultat est VRAI sauf si l'une des formules de l'ensemble est fausse (resp.
+FAUX sauf si l'une des formules est vraie).
+
+Une séquence valide dont le conséquent est vide exprime donc que les élements
+de son antécédent sont des propositions contradictoires.
+
+Une séquence valide dont l'antécédent est vide exprime donc que les élements
+de son conséquent sont des propositions "complementaires", dont la
+disjonction est tautologique.
+
+La séquence dont l'antécédent et le conséquent sont vides n'est pas valide.
+On peut la prendre pour représenter le FAUX dans le langage des séquences.
+
+Une proposition quelconque f est donc une tautologie ssi la séquence " -> f"
+est valide, on ramene donc la preuve d'une tautologie à démontrer la validité
+d'une séquence.
+
+
+II - L'ALGORITHME DE WANG
+=========================
+
+a) Critère de validité, séquences atomiques, complexité :
+---------------------------------------------------------
+
+Pour qu'une séquence soit valide, il SUFFIT qu'une même formule apparaisse
+dans ses deux membres (antécédent et conséquent). [conséquence immediate du
+fait que (f & X) > (f | Y) pour toute proposition f, X et Y étant des
+formules quelconques].
+
+Cette condition est aussi NÉCESSAIRE lorsque tous les élements de la séquence
+sont des variables (propositions atomiques).  [car sinon l'ensemble des
+variables apparaissant dans la séquence se divise en deux sous-enesmebles
+disjoints, celles qui apparaissent dans l'antécédent et celles qui
+apparaissent dans le conséquent : en donnant aux premières la valeur VRAI et
+aux secondes la valeur FAUX, on obtient un système de valeurs des variables
+qui rend fausse l'implication associée à la séquence ; on notera que ce
+raisonnement reste valable si l'antécédent ou le conséquent, ou les deux,
+sont vides (cf. I-c)].
+
+Exemple : la séquence " a, b -> c, d " où a, b, c, d sont des variables,
+n'est pas valide car si on prend a et b VRAIs et c et d FAUX, la proposition
+implicative associée à la séquence : (a & b) > (c | d) prend la valeur FAUX.
+
+Appelons " séquence atomique " une séquence dont tous les élements sont des
+variables.  Pour une telle séquence, nous pouvons donc décider immediatement
+de sa validité.  Nous allons à présent voir comment ramener la validité de
+toute séquence à celle d'un ensemble fini de séquences atomiques.
+
+Définissons la "complexité" d'une séquence comme le nombre total de
+connecteurs qui apparaissent dans ses élements.  Une séquence atomique est de
+complexité nulle.  Nous allons voir comment passer d'une séquence de
+complexité positive à une séquence équivalente, ou à un couple de séquences
+équivalent, de complexité strictement plus faible.
+
+Nous adpterons pour ce faire l'approche de la logique connue sous le nom de
+DÉDUCTION NATURELLE : à chaque connecteur sont attachées des règles (deux par
+connecteur), qui expriment en quelque sorte sa signification.
+
+
+b) Réduction de la complexité des formules : le cas de la négation
+------------------------------------------------------------------
+
+Soit S une séquence où apparait une négation parmi les élements de
+l'antécédent : comme l'ordre des élements est indifférent, nous pouvons
+appeler p1 cet élement, et poser p1 = ~p. La séquence S s'écrit alors :
+
+  S = ~p, p2,...,pm -> q1, q2,...,qn
+
+OBSERVATION : La séquence S est équivalente à la séquence S' obtenue en
+"faisant passer p dans le conséquent" :
+
+   S' = p2,...,pm -> p, q1, q2,...,qn
+
+Par "équivalente", nous entendons que S est valide si et seulement si S' est
+valide.
+
+En effet, dire que S est valide signifie que toutes les fois que les
+propositions pi (i= 1 ... m) sont simultanement TOUTES vraies, l'UNE AU
+MOINS des qj (j= 1 ... n) est vraie, donc que toutes les fois que les pi (i=
+2 ... m) sont toutes vraies ET QUE p EST FAUSSE, l'une au moins des qj est
+vraie.
+
+De même, dire que S' est valide signifie que toutes les fois que les
+propositions pi (i= 2 ... m) sont simultanement TOUTES vraies, l'UNE AU
+MOINS de p et des qj (j= 1 ... n) est vraie.
+
+Supposons S valide et montrons que S' l'est aussi, à savoir que si toutes les
+pi (i= 2 ... m) sont vraies, l'une au moins de p et des qj (j= 1 ... n) est
+vraie. Deux cas se présentent, selon que p est vraie ou fausse. Dans le
+premier, la conclusion est immédiate, dans le second la validité de S
+entraîne que l'une des qj est vraie, et la conclusion suit.
+
+Réciproquement, la validité de S' entraîne celle de S, car si toutes les pi
+(i=2 ... m) sont vraies et que p est fausse, alors S' nous assure que l'une
+des qj est vraie, c'est tout ce que demande S !
+
+Notre observation est ainsi établie.  Son intérêt est évidemment qu'elle
+permet de passer de S à S' dont la complexité est exactement un de moins.
+Nous la reformulons donc comme une règle d'action :
+
+
+-----------------------------------------------------------------------------
+
+ Règle Nég-Ant : (Négation dans l'antécédent)
+
+  POUR DÉMONTRER LA VALIDITÉ DE LA SÉQUENCE
+
+  " ~p, p2,...,pm -> q1, q2,...,qn "
+
+  IL SUFFIT D'ÉTABLIR CELLE DE LA SÉQUENCE
+
+   "p2,...,pm -> p, q1, q2,...,qn"
+
+  ET RÉCIPROQUEMENT.
+
+------------------------------------------------------------------------------
+
+L'application repetée de cette règle permet de ramener la preuve de la
+validité d'une séquence donnée à celle d'une séquence où aucune négation ne
+figure plus dans l'antécédent.
+
+On peut faire l'observation symétrique et voir qu'une séquence ou une
+négation apparait dans le conséquent est équivalente à la séquence obtenue en
+faisant passer la formule niée dans l'antécédent, avec un gain de complexité
+de 1, d'où la seconde règle relative à la négation :
+
+------------------------------------------------------------------------------
+
+ Règle Nég-Cons : (Négation dans le conséquent)
+
+  POUR DÉMONTRER LA VALIDITÉ DE LA SÉQUENCE
+
+  "p1, p2,...,pm -> ~q, q2,...,qn"
+
+  IL SUFFIT D'ÉTABLIR CELLE DE LA SÉQUENCE
+
+  "q, p1, p2,...,pm -> q2,...,qn"
+
+  ET RÉCIPROQUEMENT.
+
+----------------------------------------------------------------------------
+
+L'usage sytématique de ces deux règles permet donc de passer d'une séquence
+donnée à une séquence équivalente (quant à sa validité) ne contenant plus
+aucune formule de la forme (NON f).
+
+Les autres connecteurs recevront un traitement analogue.
+
+
+c) Réduction de la complexité des formules : disjonction, conjonction et
+------------------------------------------------------------------------
+implication
+-----------
+
+La définition même de la proposition implicative associée à une séquence,
+jointe à l'associativité de la disjonction, montre qu'une séquence S ou une
+disjonction apparaît dans le conséquent est équivalente à la séquence S' de
+complexité un de moins, obtenue en "supprimant les parenthèses" :
+
+  S = p1, ... , pm -> (q' | q"), q2, ... , qn
+équivaut à
+  S' = p1, ... , pm -> q', q", q2, ... , qn
+
+
+De même pour une séquence ou une conjonction apparaît dans l'antécédent :
+
+  S = (p' & p"), p2 ... , pm -> q1, q2, ... , qn
+équivaut à
+  S' = p', p", p2, ... , pm -> q1, q2, ... , qn
+
+
+Lorsqu'une disjonction apparaît dans l'antécédent, les choses se compliquent
+un peu.  Une séquence de ce type
+
+  S = (p' | p"), p2 ... , pm -> q1, q2, ... , qn
+
+est valide si et seulement si les DEUX séquences suivantes le sont :
+
+  S' = p', p2, ... , pm -> q1, q2, ... , qn
+  S" = p", p2, ... , pm -> q1, q2, ... , qn
+
+En effet, la disjonction (p' | p") est vraie si l'une ou l'autre des
+propositions p' et p" est vraie : si c'est l'une, la validité de S entraîne
+celle de S', si c'est l'autre, celle de S".  La réciproque est immédiate.  On
+notera que les deux séquences S' et S" ont chacune une complexité au plus un
+de moins que S (la somme de leurs complexités vaut un de moins).
+
+De même pour une séquence ou une conjonction apparaît dans le conséquent : la
+séquence
+
+  S = p1, ... , pm -> (q' & q"), q2, ... , qn
+
+est valide si et seulement si les DEUX suivantes, de complexité inférieure,
+le sont
+
+  S' = p1, ... , pm -> q', q2, ... , qn
+  S" = p1, ... , pm -> q", q2, ... , qn
+
+Vérification immédiate.
+
+Comme pour la négation, nous reformulons ces observations comme des règles
+associées aux connecteurs.
+
+Voici les règles de la disjonction :
+
+-----------------------------------------------------------------------------
+
+Règle Disj-Ant : (Disjonction dans l'antécédent)
+
+ POUR DÉMONTRER LA VALIDITÉ DE LA SÉQUENCE
+
+  " (p' | p"), p2,...,pm -> q1, q2,...,qn "
+
+ IL SUFFIT D'ÉTABLIR CELLE DE LA SÉQUENCE
+
+  " p', p2,...,pm -> q1, q2,...,qn "
+
+ ET CELLE DE LA SÉQUENCE
+
+  " p", p2,...,pm -> q1, q2,...,qn "
+
+ ET RÉCIPROQUEMENT.
+
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+
+Règle Disj-Cons : (Disjonction dans le conséquent)
+
+ POUR DÉMONTRER LA VALIDITÉ DE LA SÉQUENCE
+
+  " p1, p2,...,pm -> (q' | q"), q2,...,qn "
+
+ IL SUFFIT D'ÉTABLIR CELLE DE LA SÉQUENCE
+
+  " p1, p2,...,pm -> q', q", q2,...,qn "
+
+ ET RÉCIPROQUEMENT.
+
+-----------------------------------------------------------------------------
+
+
+
+Voici les règles de la conjonction :
+
+
+-----------------------------------------------------------------------------
+
+Règle Conj-Ant : (Conjonction dans l'antécédent)
+
+ POUR DÉMONTRER LA VALIDITÉ DE LA SÉQUENCE
+
+  " (p' & p"), p2,...,pm -> q1, q2,...,qn "
+
+ IL SUFFIT D'ÉTABLIR CELLE DE LA SÉQUENCE
+
+  " p', p", p2,...,pm -> q1, q2,...,qn "
+
+ ET RÉCIPROQUEMENT.
+
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+
+Règle Conj-Cons : (Conjonction dans le conséquent)
+
+ POUR DÉMONTRER LA VALIDITÉ DE LA SÉQUENCE
+
+  " p1, p2,...,pm -> (q' & q"), q2,...,qn "
+
+ IL SUFFIT D'ÉTABLIR CELLE DE LA SÉQUENCE
+
+  " p1, p2,...,pm -> q', q2,...,qn "
+
+ ET CELLE DE LA SÉQUENCE
+
+  " p1, p2,...,pm -> q", q2,...,qn "
+
+ ET RÉCIPROQUEMENT.
+
+-----------------------------------------------------------------------------
+
+
+Application au connecteur d'implication matérielle :
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Comme par définition on a "X > Y <==> ~X | Y", une séquence qui présente une
+implication dans l'antécédent peut se traiter en lui appliquant la règle
+Disj-Ant : on reécrit
+
+  S = (p' > p"), p2,...,pm -> q1, q2,...,qn
+ comme
+
+  S = (~p' | p"), p2,...,pm -> q1, q2,...,qn
+
+qui donne les deux séquences
+
+  S' = ~p', p2,...,pm -> q1, q2,...,qn
+  S" = p", p2,...,pm -> q1, q2,...,qn
+
+puis en appliquant la règle Neg-Ant a S' on obtient
+
+  S'' = p2,...,pm -> p', q1, q2,...,qn
+
+d'ou finalement un couple de deux séquences de complexité strictement
+inferieure a celle de S :
+
+  S'' = p2,...,pm -> p', q1, q2,...,qn
+  S" = p", p2,...,pm -> q1, q2,...,qn
+
+Nous formulons donc la règle derivée :
+
+-----------------------------------------------------------------------------
+
+Règle Imp-Ant : (Implication dans l'antécédent)
+
+ POUR DÉMONTRER LA VALIDITÉ DE LA SÉQUENCE
+
+  " (p' > p"), p2,...,pm -> q1, q2,...,qn "
+
+ IL SUFFIT D'ÉTABLIR CELLE DE LA SÉQUENCE
+
+  " p2,...,pm -> p', q1, q2,...,qn "
+
+ ET CELLE DE LA SÉQUENCE
+
+  " p", p2,...,pm -> q1, q2,...,qn "
+
+ ET RÉCIPROQUEMENT.
+
+-----------------------------------------------------------------------------
+
+De même, une séquence présentant une implication dans le conséquent se traite
+par Disj-Cons suivie de Neg-Cons, d'ou la règle derivée :
+
+
+-----------------------------------------------------------------------------
+
+Règle Imp-Cons : (Implication dans le conséquent)
+
+ POUR DÉMONTRER LA VALIDITÉ DE LA SÉQUENCE
+
+  " p1, p2,...,pm -> (q' > q"), q2,...,qn "
+
+ IL SUFFIT D'ÉTABLIR CELLE DE LA SÉQUENCE
+
+  " q', p1, p2,...,pm -> q", q2,...,qn "
+
+ ET RÉCIPROQUEMENT.
+
+-----------------------------------------------------------------------------
+
+On observera que la règle Imp-Cons justifie la tendance naturelle à traduire
+une proposition implicative directement sous la forme d'une séquence avec un
+antécédent non-vide : par exemple, la tautologie
+
+  (~a | (b > c)) > (a & ~b | (a > c))
+
+se traduit "officiellement" par la séquence avec antécédent vide
+
+(S0)  -> (~a | (b > c) > a & ~b | (a > c))
+
+mais, vu l'interpretation des séquences comme des implications, on est tenté
+de la traduire directement par la séquence équivalente
+
+(S1)  (~a | (b > c)) -> ((a & ~b) | (a > c))
+
+qui résulte de S0 par la règle Imp-Cons, et même, en allant plus loin dans
+l'interprétation, par la séquence avec deux élements dans le conséquent
+
+(S2)  (~a | (b > c)) -> (a & ~b) , (a > c)
+
+qui résulte de S1 par la règle Disj-Cons.
+
+
+d) Exemples :
+-------------
+
+Un certain nombre de tautologies simples sont effectivement traitées
+"instantanément" par notre méthode :
+
+" x > x " : se traduit par la séquence " -> (x > x) " qui via Imp-Cons donne
+ " x -> x " qui est valide.
+
+" x | ~x " (loi du tiers exclu) : se traduit par " -> (x | ~x) ", par
+ Disj-Cons on obtient " -> x , ~x " et par Neg-Cons " x -> x " valide.
+
+" x > (y > x) " (le premier des axiomes traditionnels) : de " -> (x > (y > x))"
+ on tire par Imp-Cons " x -> (y > x) " et, de nouveau par Imp-Cons,
+ " x, y -> x " qui est valide.
+
+En revanche, " x > (y > z) " donne par le même calcul "x, y -> z" qui est
+invalide, prendre pour la rendre fausse x et y VRAIs et z FAUX.
+
+Pour completer notre exemple precedent, établissons la validité de la
+séquence S2 : comme plusieurs règles lui sont applicables, prenons comme
+principe d'employer chaque fois que possible une règle qui donne une seule
+séquence équivalente, pas un couple (règles de la négation, Imp-Cons,
+Disj-Cons et Conj-Ant).
+
+S2 =  (~a | (b > c)) -> (a & ~b) , (a > c)
+
+Nous appliquons donc Imp-Cons au dernier élement du conséquent, il vient
+
+S3 =  a, (~a | (b > c)) -> (a & ~b) , c
+
+Nous n'echappons pas a un couple ... Appliquons Conj-Cons et traitons
+successivement
+
+S'4 =  a, (~a | (b > c)) -> a, c qui est valide, et
+
+S"4 =  a, (~a | (b > c)) -> ~b, c
+
+Par Neg-Cons il vient
+
+S5 =  a, b, (~a | (b > c)) -> c
+
+De nouveau, nous devons bifurquer : seule Disj-Ant s'applique, pour donner
+
+S'6 =  a, b, ~a -> c   et
+S"6 =  a, b, (b > c) -> c
+
+La premiere donne par Neg-Ant
+
+S7 =  a, b, -> a, c   qui est valide
+
+La seconde bifurque encore, donnant par Imp-Ant
+
+S'8 =  a, b -> b, c   qui est valide
+S"8 =  a, b, c -> c   qui est valide.
+
+La preuve de la validité de S2, donc de S0, donc que la formule initiale
+
+  (~a | (b > c)) > (a & ~b | (a > c))
+
+est bien une tautologie, est ainsi achevee.
+
+
+Naturellement, d'autres preuves sont possibles, en appliquant les règles dans
+un ordre different. Par exemple, si on adopte une strategie "de gauche a
+droite", en cherchant dans l'antécédent d'abord, puis dans le conséquent, on
+obtient:
+
+S2 =  (~a | (b > c)) -> (a & ~b) , (a > c)
+
+par Disj-Ant, bifurcation
+
+S'13 =  ~a ->  (a & ~b) , (a > c)
+S"13 =  (b > c) -> (a & ~b) , (a > c)
+
+De S'13, par Neg-Ant
+
+S14 =   -> a, (a & ~b) , (a > c)
+
+Ici "le bon choix" est manifestement Imp-Cons, qui donne
+
+S15 =  a -> a, (a & ~b), c   qui est valide,
+
+ce qui règle le cas de S'13.
+
+Si "betement" nous prenons d'abord Conj-Cons, nous bifurquons a nouveau
+
+S'16 =   -> a, (a > c) compte-tenu de ce que "a, a = a"
+S"16 =   -> a, ~b, (a > c)
+
+S'16 par Imp-Cons donne
+
+S17 =   a -> a, c   valide
+
+S"16 par Neg-Cons (systematiquement de gauche a droite ...)
+
+S18 =   b -> a, (a > c)
+
+et enfin par Imp-Cons
+
+S19 =  a, b -> c    valide
+
+Comme on voit, le résultat final (ici, la validité de S'13) ne change pas,
+mais bien la longueur de la preuve. Le programme ici propose, evidemment,
+suit une strategie figée de gauche a droite, avec le genre d'inefficacite que
+nous venons de voir. Mais il est plus vite écrit qu'un programme
+"astucieux".
+
+La preuve de S"13 (avec variantes) est laissée en exercice.
+
+
+III - SYSTÈME FORMEL
+====================
+
+Bien que les observations que nous avons faites précédemment aient énoncé des
+ÉQUIVALENCES entre séquences (ou couples de séquences), il est clair que les
+règles que nous en avons tirées s'utilisent dans un seul sens, celui qui fait
+décroître la complexité des séquences.  En outre, leur mise en oeuvre a fait
+clairement apparaître une structure de preuve arborescente.  Il est donc
+naturel de les reformuler comme RÈGLES DE DEDUCTION dans le cadre d'un
+système formel.
+
+
+a) Langage, axiomes, règles de déduction
+----------------------------------------
+
+Le langage de notre système est forme des SÉQUENCES.  Les théorèmes du
+système seront les séquences valides.
+
+Nous prenons comme AXIOMES toutes les séquences dont l'antécédent et le
+conséquent ont une intersection non vide.
+
+Les RÈGLES DE DÉDUCTION sont au nombre de 8 (2 par connecteur), simples
+recopies des 8 règles édictées ci-dessus dans le format où la conclusion est
+en-dessous du trait et les prémisses au dessus (alors qu'auparavant nous
+disions "POUR <conclusion> IL SUFFIT DE <prémisses>).
+
+
+   p2,...,pm -> p, q1, q2,...,qn
+Nég-Ant :  -------------------------------
+  ~p, p2,...,pm -> q1, q2,...,qn
+
+
+   q, p1, p2,...,pm -> q2,...,qn
+Nég-Cons : --------------------------------
+   p1, p2,...,pm -> ~q, q2,...,qn
+
+
+  p', p2,...,pm -> q1, q2,...,qn , p", p2,...,pm -> q1, q2,...,qn
+Disj-Ant : ------------------------------------------------------------------
+   (p' | p"), p2,...,pm -> q1, q2,...,qn
+
+
+   p1, p2,...,pm -> q', q", q2,...,qn
+Disj-Cons : --------------------------------------
+   p1, p2,...,pm -> (q' | q"), q2,...,qn
+
+
+   p', p", p2,...,pm -> q1, q2,...,qn
+Conj-Ant : -------------------------------------
+   (p' & p"), p2,...,pm -> q1, q2,...,qn
+
+
+  p1, p2,...,pm -> q', q2,...,qn , p1, p2,...,pm -> q", q2,...,qn
+Conj-Cons : -----------------------------------------------------------------
+   p1, p2,...,pm -> (q' & q"), q2,...,qn
+
+
+  p2,...,pm -> p', q1, q2,...,qn , p", p2,...,pm -> q1, q2,...,qn
+Imp-Ant : -----------------------------------------------------------------
+   (p' > p"), p2,...,pm -> q1, q2,...,qn
+
+
+   q', p1, p2,...,pm -> q", q2,...,qn
+Imp-Cons : --------------------------------------
+   p1, p2,...,pm -> (q' > q"), q2,...,qn
+
+
+
+b) Exemples d'arbres de preuve
+ ---------------------------
+
+Loi du tiers exclu :
+      Axiome
+      --------
+      x -> x
+    Nég-Cons -----------
+      -> x, ~x
+    Disj-Cons ------------
+      -> (x | ~x)
+
+
+Première preuve de S2 :
+
+    Axiome Axiome  Axiome
+    ------------- ----------  ----------
+    a,b, -> a,c a,b -> b,c , a,b,c -> c
+    ----------- I-A ------------------------
+    a,b,~a -> c , a,b,(b>c) -> c
+   D-A ----------------------------------------
+  Axiome   a,b,(~a|(b>c)) -> c
+  ------------------- Neg-Cons -----------------------
+  a,(~a|(b>c)) -> a,c , a,(~a|(b>c)) -> ~b,c
+ Conj-Cons --------------------------------------------------------
+   a,(~a|(b>c)) -> (a&~b),c
+  Imp-Cons -----------------------------
+   (~a|(b>c)) -> (a&~b),(a>c)
+
+
+
+c) Strategie de recherche de l'arbre de preuve, Programme
+---------------------------------------------------------
+
+Nos règles de production ont la bonne volonté d'utiliser des prémisses qui se
+déduisent de la conclusion (au contraire d'une règle comme "modus ponens").
+L'application d'une règle se traduit donc par un ou deux appels récursifs de
+la procédure de démonstration.
+
+En outre, les prémisses ont des complexités strictement inférieures à celles
+des conclusions, de sorte que toute application de règle "constitue un
+progrès vers une solution".  Il n'y a pas de risque de boucle, ni même
+d'échec et d'obligation de revenir en arriere (back-track).
+
+La seule subtilité est que certains choix sont plus habiles que d'autres, et
+conduisent plus vite à une solution.
+
+Le programme wang.pascal suit une stratégie figée de gauche à droite, en
+cherchant d'abord dans l'antécédent puis dans le conséquent, et en appliquant
+la règle associée au connecteur principal de la première formule non-atomique
+qu'il trouve.
+
+Ceci conduit à représenter les séquences comme des quadruplets d'ensembles de
+propositions, en  distinguant les formules atomiques et les formules
+non-atomiques.  Les propositions sont naturellement des arbres, pour en faire
+des ensembles il faut que les adresses de ces arbres soient de type scalaire,
+ce qui exclut les pointeurs que nous avons utilises jusqu'ici : il nous faut
+revenir à une représentation "à la Fortran" par tableaux d'entiers, comme il
+avait été proposé en son temps (cf. la discussion dans M3>arb>arbin.txt).
+
+En outre, il importe pour pouvoir appliquer le critère de validité des
+séquences, et pour assurer qu'une même proposition ne sera pas traitée deux
+fois, que l'égalité des propositions soit facile à vérifier.  Comme dans tout
+l'algorithme il n'y a pas création de proposition nouvelle (toutes celles qui
+apparaissent sont des sous-expressions de la candidate-tautologie), il suffit
+d'assurer qu'À LA LECTURE deux propositions identiques seront représentées
+par le même arbre (à la même adresse).  Pour la réalisation voir le segment
+propositions.incl.pascal.
+
+
+Exercice :
+---------
+
+Modifier le programme pour lui faire employer une stratégie plus raffinée,
+comme celle que nous avons prise pour la première preuve de S2.  Pour ne pas
+perdre de temps en tests inutiles, on gérera 10 ensembles au lieu de 4, en
+distinguant les formules atomiques, les négations, les disjonctions, les
+conjonctions et les implications. Y a-t-il une strategie optimale ?
