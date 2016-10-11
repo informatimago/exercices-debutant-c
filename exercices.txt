@@ -342,3 +342,59 @@ EOF
 *** Hint
 
 man 3 multibyte
+** Trois exercices de manipulation de liste                       :listes:XX:
+
+Implanter trois fonctions pour manipuler des listes d'entier:
+
+- une fonction qui prend une liste d'entier, et retourne un nouvelle liste 
+  d'entier avec tous les entier impair enlevés.
+
+- une fonction qui enlève d'une liste chaînée tous les n-ième éléments.
+
+- une fonction qui échange les deux moitiés d'une liste; si le nombre 
+  d'éléments est impair, celui du millieu doit aller avec la seconde
+  moitié de la liste.
+
+
+Les deux dernières fonctions peuvent modifier la liste originale.
+
+
+*** Exemple
+
+% ./list
+(0 1 2 3 4 5 6 7 8 9)
+with odd number removed: (0 2 4 6 8)
+
+(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
+with every other element removed: (0 2 4 6 8 10 12 14 16 18)
+
+(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
+with every third element removed: (0 1 3 4 6 7 9 10 12 13 15 16 18 19)
+
+List ()
+with the two half swapped: ()
+
+List (1)
+with the two half swapped: (1)
+
+List (1 2)
+with the two half swapped: (2 1)
+
+List (1 2 3)
+with the two half swapped: (2 3 1)
+
+List (1 2 3 4)
+with the two half swapped: (3 4 1 2)
+
+List (1 2 3 4 5)
+with the two half swapped: (3 4 5 1 2)
+
+List (1 2 3 4 5 6)
+with the two half swapped: (4 5 6 1 2 3)
+
+List (0 1 2 3 4 5 6 7 8 9)
+with the two half swapped: (5 6 7 8 9 0 1 2 3 4)
+
+List (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
+with the two half swapped: (10 11 12 13 14 15 16 17 18 19 0 1 2 3 4 5 6 7 8 9)
+
