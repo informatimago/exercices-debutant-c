@@ -30,7 +30,7 @@ pas de racines réelles.
 
 http://fr.kalkulilo.net/calculatrice-equation-second-degre
 
-** Saisons                                                    :alternative:X:
+** Saisons                                                   :alternatives:X:
 
 Définir une fonction retournant un caractère suivant la saison, selon la table:
 
@@ -47,7 +47,7 @@ numéro du jour (1 a 31).
 On peut supposer que le changement de saison se fait toujours du 20 au
 21 du mois.
 
-** Batons                                                        :tableaux:X:
+** Batons                                                        :vecteurs:X:
 
 https://programmingpraxis.com/2016/10/07/sticks/
 
@@ -71,7 +71,7 @@ Votre tâche est d'écrire un programme qui combine un paquet de batons
 
 man 3 qsort
 
-** reverse-file                                                  :fichier:XX:
+** reverse-file                                                 :fichiers:XX:
 
 Écrire un filtre qui lit des lignes de texte de stdin, et les écrit
 sur stdout dans l'ordre inverse: la première ligne est écrite en
@@ -112,7 +112,178 @@ Il faudra écrire deux algorithmes:
   grand, qui utilisera un ou plusieurs fichiers temporaires (jusqu'à
   64 GB de fichier temporaire en tout).
 
-** reverse-lines                                       :encodage:fichier:XXX:
+** Conjugaison de verbes du premier et deuxième groupe           :chaines:XX:
+
+Écrire un programme qui prend en argument un verbe du premier ou du
+deuxième groupe (en -er ou en -ir), et qui affiche toutes ses conjugaisons.
+
+Optionnellement, on il peut prendre un temps en deuxième argument et
+alors il affiche la conjugaison du verbe seulement à ce temps là.
+
+Note: attention à l'encodage des lettres accentuées: il faut tenir
+compte du locale (variables d'environnement LC_MESSAGES, LC_CTYPE,
+LC_ALL), pour les données suivantes:
+
+- arguments (passés par argv); ils sont tapés sur un terminal lequel 
+  les encode selon ses capacités et sa configuration.  Le shell les
+  transmet tels-quels, et c'est au programme de les interpréter en
+  fonction du locale (LC_CTYPE ou par défaut LC_ALL).
+
+- l'encodage des chaînes contenues dans le programme C dépend du compilateur.
+
+  Voir: https://gcc.gnu.org/onlinedocs/cpp/Character-sets.html
+
+  Avec gcc, on peut donc encoder le source en UTF-8 et supposer que les
+  chaînes (char[]) seront encodées en UTF-8 dans l'exécutable.  Il
+  faudra alors les convertirs en vecteurs de caractères (wchar_t[])
+  avant d'effectuer des traitements sur les caractères, puis les
+  reconvertir en séquences d'octets  (char[]) encodées en dans le code
+  spécifié par le locale (LC_MESSAGES, LC_CTYPE, LC_ALL)  avant de les
+  imprimer.
+
+  Si l'on veut écrire un programme portable (d'un compilateur à
+  l'autre), il faut se restreindre au jeu de caractères ASCII (lettres
+  non-accentuées), et utiliser des fichiers de resource externes (qui
+  peuvent être intégrés dans le source du programme, mais sous forme
+  encodée), pour les textes utilisant des caractères hors ASCII.
+
+
+Cet exercice serait plus facile pour les anglais...
+
+
+*** Exemples
+
+% conjuguer finir 'Passé composé' 
+Passé composé 
+    j'ai fini 
+    tu as fini 
+    il a fini 
+    nous avons fini 
+    vous avez fini 
+    ils ont fini
+
+% conjuguer manger
+Indicatif Présent
+    je mange
+    tu manges
+    il mange
+    nous mangeons
+    vous mangez
+    ils mangent
+Passé composé
+    j'ai mangé
+    tu as mangé
+    il a mangé
+    nous avons mangé
+    vous avez mangé
+    ils ont mangé
+Imparfait
+    je mangeais
+    tu mangeais
+    il mangeait
+    nous mangions
+    vous mangiez
+    ils mangeaient
+Plus-que-parfait
+    j'avais mangé
+    tu avais mangé
+    il avait mangé
+    nous avions mangé
+    vous aviez mangé
+    ils avaient mangé
+Passé simple
+    je mangeai
+    tu mangeas
+    il mangea
+    nous mangeâmes
+    vous mangeâtes
+    ils mangèrent
+Passé antérieur
+    j'eus mangé
+    tu eus mangé
+    il eut mangé
+    nous eûmes mangé
+    vous eûtes mangé
+    ils eurent mangé
+Futur simple
+    je mangerai
+    tu mangeras
+    il mangera
+    nous mangerons
+    vous mangerez
+    ils mangeront
+Futur antérieur
+    j'aurai mangé
+    tu auras mangé
+    il aura mangé
+    nous aurons mangé
+    vous aurez mangé
+    ils auront mangé
+Conditionnel Présent
+    je mangerais
+    tu mangerais
+    il mangerait
+    nous mangerions
+    vous mangeriez
+    ils mangeraient
+Conditionnel Passé
+    j'aurais mangé
+    tu aurais mangé
+    il aurait mangé
+    nous aurions mangé
+    vous auriez mangé
+    ils auraient mangé
+Subjonctif Présent
+    que je mange
+    que tu manges
+    qu'il mange
+    que nous mangions
+    que vous mangiez
+    qu'ils mangent
+Subjonctif Passé
+    que j'aie mangé
+    que tu aies mangé
+    qu'il ait mangé
+    que nous ayons mangé
+    que vous ayez mangé
+    qu'ils aient mangé
+Imparfait du Subjonctif
+    que je mangeasse
+    que tu mangeasses
+    qu'il mangeât
+    que nous mangeassions
+    que vous mangeassiez
+    qu'ils mangeassent
+Plus-que-parfait du Subjonctif
+    que j'eusse mangé
+    que tu eusses mangé
+    qu'il eût mangé
+    que nous eussions mangé
+    que vous eussiez mangé
+    qu'ils eussent mangé
+Impératif Présent
+    mange
+    mangeons
+    mangez
+Impératif Passé
+    aie mangé
+    ayons mangé
+    ayez mangé
+Infinitif Présent
+    manger
+Infinitif Passé
+    avoir mangé
+Participe Présent
+    mangeant
+Participe Passé
+    mangé
+    ayant mangé
+Gérondif Présent
+    en mangeant
+Gérondif Passé
+    en ayant mangé
+
+** reverse-lines                                      :encodage:fichiers:XXX:
 
 Écrire un filtre qui lit des lignes de stdin, et qui les écrits sur
 stdout en les inversant (en écrivant le premier caractère de la ligne
