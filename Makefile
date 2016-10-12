@@ -4,7 +4,7 @@ help::
 	@echo make compile-solutions
 	@echo make test-solutions
 
-TMP     := $(TMPDIR)
+TMP     := $(shell echo $${TMPDIR-$${TMP-/tmp}})
 ZIPNAME := exercices-$$(date +%Y%m%d)
 
 zip: ../$(ZIPNAME).zip
