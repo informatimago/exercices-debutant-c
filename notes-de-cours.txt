@@ -1,0 +1,189 @@
+
+Programmes en console -- Linux
+----------------------------------------
+
+https://openclassrooms.com/courses/apprenez-a-programmer-en-c/votre-premier-programme
+
+
+
+Je t'ai crée un compte sur ma machine Linux hubble.informatimago.com.
+Pour y accéder depuis MS-Windows, tu auras besoin de PuTTY, qui est un
+émulateur de terminal couplé aux protocoles de communication ssh et
+telnet, entre autres.  Un peu comme la Console  de MS-Windows, mais au
+lieu de te connecter au système MS-Windows, tu vas pouvoir te
+connecter à d'autres ordinateurs sur Internet.
+
+
+Tu peux télécharger PuTTY ici:
+http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html
+(télécharge le .zip, tous les programmes inclus seront utiles).
+
+Quand tu lances PuTTY, tu indique les éléments de connexion dans le
+dialogue:
+- host name     = hubble.informatimago.com
+- login account = jee
+- password      = j33wh1zz
+
+Une fois connectée, tu as un shell unix, et tu peux programmer, mais
+dans l'environnement unix (Linux) au lieu de MS-Windows.
+
+Avec PSCP, tu peux transférer des fichiers.  Tu pourras t'en servir
+pour copier tes programmes sources vers hubble, et les compiler et
+exécuter sur Linux pour comparer.
+
+Avec PuTTY tu peux aussi établir des connexion utilisant le protocole
+telnet; ssh est un protocol encrypté, tandis que telnet n'est en
+général pas encrypté, aussi tombe-t'il en désuétude. Cependant il
+reste quelques services qui sont encore intéressant à utiliser via
+telnet.  Par exemple connecte toi à l'ordinateur
+towel.blinkenlights.nl via telnet, et installe toi confortablement1
+
+
+Variables
+----------------------------------------
+
+https://openclassrooms.com/courses/apprenez-a-programmer-en-c/un-monde-de-variables
+
+
+Concernant sscanf et atoi, noter que ces fonctions interprètent
+différement le texte analysé: atoi considère un entier décimal, et
+retourne 0 en cas d'erreur;  scanf %i accepte aussi des entiers en
+base 8 (préfixé avec a 0) et en base 16 (préfixé avec 0x).
+
+% scanf-vs-atoi 123 0123 0986 0x123 0xhello 
+atoi("123")                          ->  123
+sscanf("123","%i",&value) -> 1, value =  123
+
+atoi("0123")                          ->  123
+sscanf("0123","%i",&value) -> 1, value =   83
+
+atoi("0986")                          ->  986
+sscanf("0986","%i",&value) -> 1, value =    0
+
+atoi("0x123")                          ->    0
+sscanf("0x123","%i",&value) -> 1, value =  291
+
+atoi("0xhello")                          ->    0
+sscanf("0xhello","%i",&value) -> 1, value =    0
+
+
+
+Calculs
+----------------------------------------
+
+https://openclassrooms.com/courses/apprenez-a-programmer-en-c/une-bete-de-calcul
+
+% arithmetic
+
+unsigned, standard, modulo 2^n arithmetic:
+uc=4294967295+4294967295=4294967294
+
+signed, implementation dependant, anything can happen:
+c=2147483647+2147483647=-2
+
+
+Mathématiquement:
+
+     4294967295+4294967295 ≡ 4294967294 [4294967296]
+<=> ∃k, 4294967295+4294967295 = 4294967294 + k*4294967296
+avec k=1:
+(+ 4294967295 4294967295)       --> 8589934590
+(+ 4294967294 (* 1 4294967296)) --> 8589934590
+mais on ne peut pas le calculer 8589934590 avec des unsigned int en C!
+
+Note: en général, les signed vont aussi avoir une arithmétique module
+2^n, mais le standard C ne le spécifie pas, et permet aux
+implémentations d'avoir le comportement qui bon leur semble (crash,
+signalement d'un erreur de débordement, résultat aléatoires, ou même,
+arithmétique module 2^n, rien n'est garanti (voir la documentation du
+compilateur et de l'ordinateur utilisé)).
+
+
+Il faut donc maitriser l'amplitude des nombres utilisés dans les
+calculs, et faire attention avec les multiplications, mais aussi avec
+des additions, quand elles sont nombreuses ou travaillent sur des
+grand nombres.
+
+
+
+Quand on veut établir un algorithme à base de calculs, on peut
+procéder de la façon suivante:
+
+- faire trois colonnes, celle du milieu plus grande.
+- écrire au milieu, le résultat que l'on veut (le nom d'une variable);
+- écrire à droite, une définition (en français) de ce résultat.
+- ajouter au milieu, des formules établissant l'égalité mathématique
+  (qui se traduira plus tard en assignement de variables) entre
+  variables.
+- ajouter à droite les définitions (en français) des nouvelles
+  variables.  Certaines variables peuvent être des données en entrée,
+  auquel cas elles n'ont pas besoin de formule mathématiques; elles
+  sont simplement définies comme des données.
+- répéter jusqu'à ce que toutes les variables mentionnées dans les
+  formules aient une définition à droite, et au millieu.
+- finalement indiquer à gauche dans quel ordre il faudra exécuter les
+  formules en partant par les données d'entrées pour aboutir au
+  résultat voulu.
+
+TODO: un exemple.
+
+Note: mathématiquement, certaines variables peuvent être indexé et on
+peut avoir des définitions récursives (séries).  Celà ce traduira au
+final par des itérations (des boucles de programme), et des
+assignement répétés.
+
+       
+
+
+Conditions
+----------------------------------------
+
+https://openclassrooms.com/courses/apprenez-a-programmer-en-c/les-conditions-1
+
+- Utilisation de vecteur en place d'alternatives.
+
+    int f(int x){
+        switch(x)
+        case 0: return 1;
+        case 1: return 33;
+        case 2: return 42;
+        case 3: return 55;
+        default return 0;}}
+
+
+    int f(int x){
+       if((x<0)||(3<x)){
+          return 0;
+       }else{
+           static int table[]={1,33,42,55};
+           return table[x]; }}
+
+Normalement, les compilateurs moderne sont capable d'optimiser un
+switch en utilisant une table un des tests successifs
+automatiquement. Mais il peut aussi être pratique (et parfois plus
+rapide à l'exécution) d'utiliser une table.  (Certains algorithmes
+utilisent explicitement de telles tables, par exemple l'analyse
+syntaxing LALR).
+
+
+- Utilisation de fonctions en place d'alternatives.
+
+    int true(int a,int b){return a;}
+    int false(int a,int b){return b;}
+
+    typedef int (*booleen)(int,int);
+    #define IF(condition,then,else) condition(then,else)
+    IF(true,1,2) --> 1
+    IF(false,1,2) --> 2
+
+    boolean x=true;
+    IF(x,1,2) --> 1
+
+
+
+Boucles
+----------------------------------------
+https://openclassrooms.com/courses/apprenez-a-programmer-en-c/les-boucles-1
+
+
+TODO: invariants de boucle, pre-,post-conditions.

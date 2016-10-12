@@ -16,24 +16,33 @@ zip: ../$(ZIPNAME).zip
 	mv -v $(TMP)/$(ZIPNAME).zip ..
 	rm -rf $(TMP)/$(ZIPNAME)
 
-SOLUTIONS=batons character-of-season list reverse-file reverse-lines-by-byte reverse-lines-by-character
+PROGRAMS = \
+	solutions/batons \
+	solutions/character-of-season \
+	solutions/list \
+	solutions/reverse-file \
+	solutions/reverse-lines-by-byte \
+	solutions/reverse-lines-by-character \
+	notes/arithmetic \
+	notes/scanf-vs-atoi
 
-compile-solutions:
-	@for solution in $(SOLUTIONS) ; do \
-		echo ==== $$solution ======================================================================== \
-		| sed -e 's/^\(........................................................................\).*/\1/' ;\
-		make -C solutions/$$solution all ; done
 
-test-solutions:
-	@for solution in $(SOLUTIONS) ; do \
-		echo ==== $$solution ======================================================================== \
+compile:
+	@for program in $(PROGRAMS) ; do \
+		echo ==== $$program ======================================================================== \
 		| sed -e 's/^\(........................................................................\).*/\1/' ;\
-		make -C solutions/$$solution test ; done
+		make -C $$program all ; done
+
+test:
+	@for program in $(PROGRAMS) ; do \
+		echo ==== $$program ======================================================================== \
+		| sed -e 's/^\(........................................................................\).*/\1/' ;\
+		make -C $$program test ; done
 
 clean clean-all:
-	@for solution in $(SOLUTIONS) ; do \
-		echo ==== $$solution ======================================================================== \
+	@for program in $(PROGRAMS) ; do \
+		echo ==== $$program ======================================================================== \
 		| sed -e 's/^\(........................................................................\).*/\1/' ;\
-		make -C solutions/$$solution $@ ; done
+		make -C $$program $@ ; done
 
-.PHONY: zip compile-solutions test-solutions
+.PHONY: zip compile test
