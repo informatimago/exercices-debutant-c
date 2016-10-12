@@ -71,6 +71,166 @@ Votre tâche est d'écrire un programme qui combine un paquet de batons
 
 man 3 qsort
 
+** Reformatage de fichier                                    :scanf:printf:X:
+
+Le but de ce programme sera de convertir un fichier contenant des
+enregistrements de taille fixe, en un fichier au format "CSV",
+Comma-Separated-Value, valeurs séparées par des virgules, qui est plus
+commun avec les programmes plus récents.  
+
+*** Format du fichier d'entrée
+
+Le fichier primatt-card.data contient des images de carte perforée,
+sous forme d'enregistrements de taille fixe (80 caractères encodés en
+ASCII), terminés par un newline. (Les enregistrements font donc un
+total de 81 otets).
+
+La structure de ces enregistrements est décrite par la section de code
+COBOL suivante.  (primatt = prime attribution; chaque enregistrement
+contient des informations sur un vendeur).
+
+       01  VENDEUR-E.
+           02  MAGASIN-E          PIC 999.
+           02  NOVEND-E           PIC 9999.
+           02  NOM-E              PIC X(20).
+           02  PRENOM-E           PIC X(15).
+           02  MONT1-E            PIC 9999V99.
+           02  MONT2-E            PIC 9999V99.
+           02  MONT3-E            PIC 9999V99.
+           02  PRIM1-E            PIC 999V99.
+           02  PRIM2-E            PIC 999V99.
+           02  PRIM3-E            PIC 999V99.
+           02  FILLER             PIC X(6).
+
+
+
+PIC 9 indique un champ numérique contenant 1 chiffre.
+
+PIC 999 indique un champ numérique contenant 3 chiffres.
+
+
+PIC S9 indique un champ numérique contenant 1 chiffre, préfixé d'un
+signe (+, - ou espace).
+
+PIC 9S indique un champ numérique contenant 1 chiffre, suffixé d'un
+signe (+, - ou espace).
+
+Dans ces deux derniers cas, "-3" et "3-" représentent le nombre
+-3. Heureusement, il n'y a pas de tels champs dans notre fichier:
+tous les nombres dans l'enregistrement VENDEUR-E sont non-signés.
+
+
+PIC X(n) indique un champ chaîne contenant n caractères. (Lorsque  la
+chaîne est plus petite elle est en général alignée sur la gauche, et
+le champ est rempli d'espace à droite).
+
+PIC 999V99 indique un champ numérique contenant 5 chiffres, et une
+virgule virtuelle à la position indiquée par le point.  Il est
+conseillé de représenter ces nombres en C sous forme d'entier sans
+virgule, et d'en tenir compte de cette virgule virtuelle lors des
+calculs.
+
+Les champs sont collés les uns aux autres sans séparation; sur une
+carte perforrée, l'espace était cher, il fallait caser le maximum de
+données dans les 80 colonnes; on pouvait toujours imprimer des traits
+pour séparer les champs sur la carte.
+http://www.feb-patrimoine.com/projet/cartes_perforees/machines_mecanographiques-2.htm
+
+Les champs "filler" sont des champs de remplissage, ou de séparations,
+que l'on ignore entièrement.
+
+
+
+Pour effectuer une somme de nombres tels que:
+    PIC 999V99  +  PIC 99V999 
+
+on peut écrire en C:
+
+    int a_2 = 12345;   int b_3 = 33444;
+    int c_3 = a_2*10 + b_3;
+    fprintf("c = %.3f\n",c_3/1000.0d0)
+
+Si on convertissait les nombre en virgule flotante, on obtiendrait
+facilement des erreurs de calculs.
+
+*** Format du fichier de sortie
+
+On utilisera un format CSV: chaque champ est écrit entre double-quote,
+et séparé des champs adjacent par une virgule, sans espace (s'il y
+avait des espaces, il feraient partie du champ).  Chaque
+enregistrement est ainsi de taille variable est écrit sur une ligne
+terminée par un newline.
+
+Lorsque le champ ne contient que des lettres, chiffre, point décimale,
+ou signe, sans espace et sans autre caractère spécial, alors on peut
+l'écrire sans les double-quotes.  (La présence des double-quotes
+n'implique pas que le type du champ soit chaîne plutôt que numérique).
+Si un champ doit contenir une double-quote celle-ci doit être doublée: 
+Un champ contenant: « Son nom est "nom". » s'écrira en CSV: 
+"Son nom est ""nom""."
+
+Le format CSV a de nombreuses variantes et beaucoup plus de détails et
+de difficultés, dus à son évolution originellement informelle.
+https://www.ietf.org/rfc/rfc4180.txt
+
+
+Les nombres à virgule devront être écrit avec un point décimal.
+
+*** Usage de la commande:
+
+  convert-from-fixed-to-csv [-h|--help] [-i|--input $inputPath] [-o|--output $outputPath]
+
+L'option --input est suivie du chemin du fichier d'entrées à
+enregistrements de taille fixe.  Si elle n'est pas fournie, alors le
+programme utilisera stdin.
+
+L'option --output est suivie du chemin du fichier CSV en sortie.  Si
+elle n'est pas fournie, alors le programme écrira sur stdout.
+
+
+À la fin du traitement, le programme devra écrire sur stderr un
+message indiquant le nombre d'enregistrements lu, et le nombre
+d'enregistrement écrits.
+
+L'encodage des fichiers est purement ASCII (7-bit, pas d'accents).
+
+*** Hint
+
+sscanf n'est pas forcément la meilleur façon de découper une chaîne
+avec un format fixe.  Mais elle peut être utilisée pour convertir les
+champs numériques individuels plus avantageusement que atoi qui ne
+signale pas d'erreur, et qui interprète la base du nombre donné.
+
+*** Exemple
+
+% convert-from-fixed-to-csv  < primatt-card.data
+1,11,"BOURGUIGNON","BERNARD",9999.99,9999.99,9999.99,999.99,999.99,999.00
+1,12,"BOURGUIGNON","PASCAL",9999.99,9999.99,9999.99,999.99,999.99,999.00
+1,13,"JARRE","JEAN-MICHEL",1234.56,0.00,7890.12,345.67,890.12,345.67
+1,14,"JARRE","MARCEL",1234.56,0.00,7890.12,345.67,890.12,345.67
+1,2005,"MAYER","JEAN",9874.52,3854.12,0.00,154.75,966.54,154.56
+1,2006,"MAYER","THIERRY",9874.52,3854.12,0.00,154.75,966.54,154.56
+2,27,"SCHULTZE","CHRISTOF",9876.54,3210.98,7654.32,0.00,109.87,654.00
+2,28,"SCHULTZE","KLAUS",9876.54,3210.98,7654.32,0.00,109.87,654.00
+2,29,"PAPATHANASSIOU","INAKIS",393.93,9393.93,0.00,111.11,222.22,333.33
+2,30,"PAPATHANASSIOU","VANGELIS",393.93,9393.93,0.00,111.11,222.22,333.33
+3,31,"OLDFIELD","MIKE",1122.33,0.00,0.00,444.33,0.00,213.21
+3,32,"OLDFIELD","NEWELL",1122.33,0.00,0.00,444.33,0.00,213.21
+3,33,"ROUSSEAU","DEMIS",0.00,9922.11,0.00,0.08,765.44,208.68
+3,34,"ROUSSEAU","JEAN-JACQUES",0.00,9922.11,0.00,0.08,765.44,208.68
+3,35,"WATSON","IBM",3213.21,3243.23,5555.55,0.00,777.00,0.00
+3,36,"WATSON","ROBERT",3213.21,3243.23,5555.55,0.00,777.00,0.00
+3,3007,"SCHTROUMPF","COQUET",0.00,0.00,0.00,0.00,0.00,0.00
+3,3008,"SCHTROUMPF","GOURMAND",0.00,0.00,0.00,0.00,0.00,0.00
+4,49,"JESUISPASVENDEUR","CESTPASMOI",0.00,0.00,0.00,0.00,0.00,0.00
+4,50,"JESUISPASVENDEUR","YCELUI",0.00,0.00,0.00,0.00,0.00,0.00
+23,61,"KRONEMBOURG","BRUNOT",1650.16,8498.11,587.97,680.59,680.59,620.59
+23,62,"KRONEMBOURG","FREDDY",1650.16,8498.11,587.97,680.59,680.59,620.59
+72,53,"CHLOROPHYLE","PHILIPPE",7351.88,1440.89,6999.22,22.01,19.65,142.82
+72,54,"CHLOROPHYLE","VIOLETTE",7351.88,1440.89,6999.22,22.01,19.65,142.82
+Read 24 lines
+Written 24 lines
+
 ** reverse-file                                                 :fichiers:XX:
 
 Écrire un filtre qui lit des lignes de texte de stdin, et les écrit
