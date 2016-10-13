@@ -140,7 +140,7 @@ Conditions
 
 https://openclassrooms.com/courses/apprenez-a-programmer-en-c/les-conditions-1
 
-- Utilisation de vecteur en place d'alternatives.
+- Utilisation de vecteurs en place d'alternatives.
 
     int f(int x){
         switch(x)
@@ -158,32 +158,66 @@ https://openclassrooms.com/courses/apprenez-a-programmer-en-c/les-conditions-1
            static int table[]={1,33,42,55};
            return table[x]; }}
 
-Normalement, les compilateurs moderne sont capable d'optimiser un
-switch en utilisant une table un des tests successifs
-automatiquement. Mais il peut aussi être pratique (et parfois plus
-rapide à l'exécution) d'utiliser une table.  (Certains algorithmes
-utilisent explicitement de telles tables, par exemple l'analyse
-syntaxing LALR).
-
-
-- Utilisation de fonctions en place d'alternatives.
-
-    int true(int a,int b){return a;}
-    int false(int a,int b){return b;}
-
-    typedef int (*booleen)(int,int);
-    #define IF(condition,then,else) condition(then,else)
-    IF(true,1,2) --> 1
-    IF(false,1,2) --> 2
-
-    boolean x=true;
-    IF(x,1,2) --> 1
+Normalement, les compilateurs modernes sont capable d'optimiser un
+switch en utilisant une table un des tests successifs automatiquement.
+Mais il peut aussi être pratique (et parfois plus rapide à
+l'exécution) d'utiliser une table.  (Certains algorithmes utilisent
+explicitement de telles tables, par exemple l'analyse syntaxique LALR).
 
 
 
 Boucles
 ----------------------------------------
 https://openclassrooms.com/courses/apprenez-a-programmer-en-c/les-boucles-1
+
+
+On a des structures de données:
+
+- simple variable,
+- structures (suite de variables),
+- unions (alternatives de variables),
+- vecteur (sequence de variables),
+- pointeurs (graphes de variables).
+
+
+On a des structures de controle (instructions):
+
+- instructions en séquence avec le point-virgule:  {a=1; b=2;}
+- alterative: if, switch.
+- boucles: while, for, do/while.
+
+On va trouver souvent une correspondance entre la structure de donnée,
+et la structure de controle qui permet de traiter cette structure de
+donnée:
+
+- une simple variable sera traité avec une simple instruction.
+- une structure sera traitée avec une séquence d'instruction (chacune traitant un champ de la structure).
+- une alternative (union) sera traité avec une alternative (if,switch).
+- un vecteur sera traité avec une boucle.
+- un graphe de variable en relation avec des pointeurs sera traité par
+  des fonctions récursives où chaque fonction aura la structure
+  correspondant aux noeuds du graphe.  Par exemple, un arbre binaire
+  peut avoir un noeud défini par:
+
+       typedef struct noeud {
+           const char* label;
+           struct noeud* gauche;
+           struct noeud* droite;
+       } noeud_t;
+
+   il pourra être traité par une fonction telle que:
+
+       void affiche_arbre(noeud_t* noeud){
+            printf("%s\n",noeud->label);
+            // un pointeur qui peut être null représente une alternative:
+            if(noeud->gauche!=null){
+                affiche_arbre(noeud->gauche);
+            }
+            if(noeud->droite!=null){
+                affiche_arbre(noeud->droite);
+            }
+       }
+
 
 
 TODO: invariants de boucle, pre-,post-conditions.
