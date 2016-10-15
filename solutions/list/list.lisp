@@ -81,3 +81,35 @@
 
 
 
+(defun repeat-list-elements (list repeat-counts)
+  (labels ((repeat-one-element (list repeat-counts result-so-far)
+             (if (null list)
+                 result-so-far
+                 (repeat-one-element (cdr list) (cdr repeat-counts)
+                                     (nconc (make-list (car repeat-counts) :initial-element (car list))
+                                            result-so-far)))))
+    (repeat-one-element list repeat-counts '())))
+
+
+(defun repeat-list-elements (list repeat-counts)
+  (if (null list)
+      '()
+      (nconc (repeat-list-elements (cdr list) (cdr repeat-counts))
+             (make-list (car repeat-counts) :initial-element (car list)))))
+
+(repeat-list-elements '(100 200 300 400 500) '(4 2 0 3 1))
+;; (500 400 400 400 200 200 100 100 100 100)
+
+(defun odd-first (list)
+  (nconc (remove-if-not (function oddp) list)
+         (remove-if     (function oddp) list)))
+
+(odd-first '(1 2 3 4 5 6 7))
+;; --> (1 3 5 7 2 4 6)
+
+
+
+(defun last-element (list &optional (n 1))
+  (first (last list n)))
+
+

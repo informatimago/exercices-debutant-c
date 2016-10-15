@@ -504,6 +504,8 @@ EOF
 man 3 multibyte
 ** Trois exercices de manipulation de liste                       :listes:XX:
 
+https://programmingpraxis.com/2016/10/11/three-list-manipulation-exercises/
+
 Implanter trois fonctions pour manipuler des listes d'entier:
 
 - une fonction qui prend une liste d'entier, et retourne un nouvelle liste 
@@ -558,3 +560,35 @@ with the two half swapped: (5 6 7 8 9 0 1 2 3 4)
 List (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19)
 with the two half swapped: (10 11 12 13 14 15 16 17 18 19 0 1 2 3 4 5 6 7 8 9)
 
+** Trois autres exercices de manipulation de liste                :listes:XX:
+
+https://programmingpraxis.com/2016/10/14/three-more-list-manipulation-exercises/
+
+Définir une fonction qui prends deux listes; la seconde est une liste
+d'entiers non-négatifs de même longueur que la première; la fonction
+doit retourner une liste d'élements de la première liste, en ordre
+inverse, chaque élement étant répété le nombre de fois spécifié par
+l'élément correspondant dans la seconde liste.
+
+
+Définir une fonction qui change l'ordre des entiers dans une liste de
+telle manière que tous les nombres impairs apparaissent avant tous les
+nombres pairs, l'ordre relatif des éléments pairs et des éléments
+impaires étant par ailleur inchangé.
+
+
+Écrire une fonction qui retourne le n-ième élément compté à partir de la
+fin de la liste.
+
+
+*** Exemples
+
+(repeat-list-elements '(100 200 300 400 500) '(4 2 0 3 1))
+--> (500 400 400 400 200 200 100 100 100 100)
+
+(odd-first '(1 2 3 4 5 6 7))
+--> (1 3 5 7 2 4 6)
+
+(last-element '(100 200 300 400 500) 1) --> 500
+(last-element '(100 200 300 400 500) 3) --> 300
+(last-element '(100 200 300 400 500) 4) --> 200
