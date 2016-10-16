@@ -25,7 +25,8 @@ PROGRAMS = \
 	solutions/reverse-lines-by-character \
 	notes/arithmetic \
 	notes/scanf-vs-atoi \
-	travaux-pratiques/plus-ou-moins
+	notes/funbool \
+	travaux-pratiques/plus-ou-moins 
 
 
 compile:
