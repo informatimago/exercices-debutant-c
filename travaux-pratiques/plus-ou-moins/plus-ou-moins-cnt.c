@@ -1,21 +1,33 @@
 /*
- un petit jeu que j'appelle « Plus ou moins ».
+
+Un petit jeu que j'appelle « Plus ou moins ».
 
 Le principe est le suivant.
 
-    L'ordinateur tire au sort un nombre entre 1 et 100.
+L'ordinateur tire au sort un nombre entre 1 et 100.
 
-    Il vous demande de deviner le nombre. Vous entrez donc un nombre entre 1 et 100.
+Il vous demande de deviner le nombre. Vous entrez donc un nombre
+entre 1 et 100.
 
-    L'ordinateur compare le nombre que vous avez entré avec le nombre « mystère » qu'il a tiré au sort. Il vous dit si le nombre mystère est supérieur ou inférieur à celui que vous avez entré.
+L'ordinateur compare le nombre que vous avez entré avec le nombre
+« mystère » qu'il a tiré au sort. Il vous dit si le nombre mystère
+est supérieur ou inférieur à celui que vous avez entré.
 
-    Puis l'ordinateur vous redemande le nombre.
+Puis l'ordinateur vous redemande le nombre.
 
-    … Et il vous indique si le nombre mystère est supérieur ou inférieur.
+… Et il vous indique si le nombre mystère est supérieur ou
+inférieur.
 
-    Et ainsi de suite, jusqu'à ce que vous trouviez le nombre mystère.
+Et ainsi de suite, jusqu'à ce que vous trouviez le nombre mystère.
 
-Le but du jeu, bien sûr, est de trouver le nombre mystère en un minimum de coups.
+Le but du jeu, bien sûr, est de trouver le nombre mystère en un
+minimum de coups.
+
+Faites un compteur de « coups ». Ce compteur devra être une variable
+que vous incrémenterez à chaque fois que vous passez dans la
+boucle. Lorsque l'utilisateur a trouvé le nombre mystère, vous lui
+direz « Bravo, vous avez trouvé le nombre mystère en 8 coups » par
+exemple.
 
 */
 
@@ -36,7 +48,7 @@ int demander_un_nombre(const char* invite){
     printf("%s : ",invite);
     fflush(stdout); // tres important!
     int nombre=0;
-    scanf("%i",&nombre);
+    scanf("%12i",&nombre);
     return nombre;
 }
 
@@ -47,9 +59,9 @@ void indiquer_ordre(const char* ordre){
 void plus_ou_moins(){
     int nombre_secret=choisir_un_nombre_aleatoire_dans_l_intervale(1,100);
     int nombre_teste=0;
-        int compte_essai=0;
+    int compte_essai=0;
     do{
-            compte_essai++;
+        compte_essai++;
         nombre_teste=demander_un_nombre("Devinez un entier entre 1 et 100");
         if(nombre_teste<nombre_secret){
             indiquer_ordre("plus");
