@@ -313,8 +313,62 @@ void test_plus_ou_moins(){
     plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,nouveau_cli_joueur()));
 }
 
-int main(){
+
+////////////////////////////////////////////////////////////////////////
+// 
+// Lorsque l'utilisateur a trouvé le nombre mystère, le programme
+// s'arrête. Pourquoi ne pas demander s'il veut faire une autre partie ?
+// 
+// Si vous faites ça, il vous faudra faire une boucle qui englobera la
+// quasi-totalité de votre programme. Cette boucle devra se répéter TANT
+// QUE l'utilisateur n'a pas demandé à arrêter le programme. Je vous
+// conseille de rajouter une variable booléenne continuerPartie
+// initialisée à 1 au départ. Si l'utilisateur demande à arrêter le
+// programme, vous mettrez la variable à 0 et le programme s'arrêtera.
+// 
+////////////////////////////////////////////////////////////////////////
+
+typedef joueur_plus_ou_moins_t* (*nouveau_joueur_pr)();
+
+
+int ask(const char* prompt,const char* no,const char* yes){
+    while(1){
+        printf("%s (%s/%s) ? ",prompt,no,yes);
+        fflush(stdout);
+        fflush(stdin);
+        char buffer[81];
+        clearerr(stdin);
+        if(scanf("%80s",buffer)){
+            if(strcmp(no,buffer)==0){
+                return 0;
+            }
+            if(strcmp(yes,buffer)==0){
+                return 1;
+            }
+            printf("Reponse invalide: %s\n",buffer);
+        }else if(feof(stdin)){
+            return -1;
+        }else{
+            fprintf(stderr,"Error while reading answer\n");
+            return -2;
+        }
+    }
+}
+
+void plusieurs_plus_ou_moins(nouveau_joueur_pr joueur_createur){
+    int encore=0;
+    do{
+        plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,joueur_createur()));
+        encore=ask("Voulez vous essayer encore","non","oui");
+    }while(encore>0);
+}
+
+int main(const int argc,const char* argv[]){
     initialiser();
-    test_plus_ou_moins();
+    if((argc>1)&&(strcmp("test",argv[1])==0)){
+        test_plus_ou_moins();
+    }else{
+        plusieurs_plus_ou_moins(&nouveau_cli_joueur);
+    }
     return 0;
 }
