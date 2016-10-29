@@ -79,10 +79,21 @@ Le but du jeu, bien sûr, est de trouver le nombre mystère en un minimum de cou
 #include <assert.h>
 #include <libgen.h>
 
+// This unused attribute prevents warnings about unused variables or
+// parameters.
 #define unused   __attribute__ ((unused))
+
+// This noreturn attributes indicates to the compiler that a function
+// will never return (because it always calls exit() or abort()).
 #define noreturn __attribute__ ((__noreturn__))
+
+// This countof(a) macro returns the number of entries in the array a.
 #define countof(a) (sizeof(a)/sizeof(a[0]))
 
+
+// The standard assert() macro doesn't print the expression that is false.
+// So here is my own assert, which stringify (transforms into a string)
+// the expression, to print it when it's false.
 #define stringify(thing) #thing
 #define my_assert(expression) \
     if(!(expression)){ \
@@ -90,10 +101,12 @@ Le but du jeu, bien sûr, est de trouver le nombre mystère en un minimum de cou
                 __FILE__,__LINE__,__FUNCTION__,stringify(expression)); \
         abort(); }
 
+// should_not_occur() is an assert that is always false, since it
+// should not occur.
 const int SHOULD_NOT_OCCUR=(0);
 #define should_not_occur() my_assert(SHOULD_NOT_OCCUR)
 
-
+// Prints an error, and exit with the exitCode.
 noreturn
 void error(int exitCode,const char* formatControl,...){
     va_list args;
@@ -105,6 +118,8 @@ void error(int exitCode,const char* formatControl,...){
     exit((exitCode==0)?EX_SOFTWARE:exitCode);
 }
 
+// Returns the given address, unless it's null, in which case it calls
+// error() with the remaining arguments.
 void* check_not_null(void* address,int status,const char* formatControl,...){
     if(!address){
         char buffer[8192];
@@ -117,7 +132,7 @@ void* check_not_null(void* address,int status,const char* formatControl,...){
     return address;
 }
 
-
+// If result is not null, then it call error() with the remaining arguments.
 void check_error_with_errno(int result,int status,const char* formatControl,...){
     if(result!=0){
         int saved_errno=errno;
@@ -130,13 +145,20 @@ void check_error_with_errno(int result,int status,const char* formatControl,...)
     }
 }
 
+// Returns a newly allocated mutable copy of the string.
+// Once a string is declared with const char*,
+// it cannot be passed anymore to functions expecting a char*,
+// so we use this function to make a mutable copy.
 char* string_copy(const char* string){
     char* copy=check_not_null(malloc(1+strlen(string)),EX_OSERR,"Out of Memory");
     strcpy(copy,string);
     return copy;
 }
 
+
+// Returns the exponential of the base to the power, for int arguments.
 int expi(int base,int power){
+    my_assert(power>=0);
     int exp=1;
     while(power!=0){
         if(power&1){
@@ -163,6 +185,13 @@ void initialiser(){
 int choisir_un_nombre_aleatoire_dans_l_intervale(int min,int max){
     return random()%(max-min+1)+min;
 }
+
+
+// Using scanf to read numbers when the input is not a number doesn't
+// eat any input. This leads to infinite loops.  So instead of using
+// bare scanf on stdin, we read it line-by-line with fgets, and use
+// sscanf to read words and numbers.  Thus next time, we get a new line.
+
 
 char* read_word(FILE* input){
     static char line[81];
@@ -202,6 +231,7 @@ void clear_screen(){
     }
     fflush(stdout);
 }
+
 
 
 typedef struct {
