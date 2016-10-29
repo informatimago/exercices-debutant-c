@@ -35,6 +35,8 @@ Le but du jeu, bien sûr, est de trouver le nombre mystère en un minimum de cou
 
 #define unused   __attribute__ ((unused))
 #define noreturn __attribute__ ((__noreturn__))
+#define countof(a) (sizeof(a)/sizeof(a[0]))
+
 
 noreturn
 void error(int exitCode,const char* formatControl,...){
@@ -95,8 +97,33 @@ int choisir_un_nombre_aleatoire_dans_l_intervale(int min,int max){
 // du jeu, indépendement de l'interface utilisateur.
 //
 ////////////////////////////////////////////////////////////////////////
+//
+// On considère le jeu entre deux joueurs: un maitre de jeu, et un joueur.
+// Le maitre de jeu choisi le nombre aléatoire, et indique au joueur la
+// comparaison avec ses choix.  Si le maitre se trompe, il perd.
+// Si le joueur trouve le nombre, il gagne.
+//
 
-typedef enum {moins=0,egal,plus,abandon} plus_ou_moins_result;
+typedef enum {moins=0,
+              egal,
+              plus,
+              abandon_joueur,
+              erreur_maitre,
+              abandon_maitre,
+} resultat_plus_ou_moins;
+
+
+const char* resultat_plus_ou_moins_label(resultat_plus_ou_moins resultat){
+    switch(resultat){
+      case moins:          return "moins grand que";
+      case egal:           return "egal au";
+      case plus:           return "plus grand que";
+      case abandon_joueur: return "le joueur abandonne";
+      case abandon_maitre: return "le maitre abandonne";
+      case erreur_maitre:  return "le maitre a fait une erreur";
+    }
+}
+
 
 typedef struct joueur_plus_ou_moins{
     void* data;
@@ -105,36 +132,54 @@ typedef struct joueur_plus_ou_moins{
     int (*jouer)(struct joueur_plus_ou_moins* joueur);
     // Appelée pour permettre au joueur de faire son choix.
     // Note: un résutat négatif indique l'abandon.
-    void (*resultat)(struct joueur_plus_ou_moins* joueur,int choix,plus_ou_moins_result resultat);
+    void (*resultat)(struct joueur_plus_ou_moins* joueur,int choix,resultat_plus_ou_moins resultat);
     // Appelée pour indiquer au joueur le résultat de son choix.
-    void (*fin)(struct joueur_plus_ou_moins* joueur,plus_ou_moins_result resultat_final);
+    void (*fin)(struct joueur_plus_ou_moins* joueur,resultat_plus_ou_moins resultat_final);
     // Appelée pour signaler la fin du jeu au joueur.
 } joueur_plus_ou_moins_t;
+
+typedef struct maitre_plus_ou_moins{
+    void* data;
+    void (*debut)(struct maitre_plus_ou_moins* maitre,int min,int max);
+    // Appelée au début du jeu pour informer le maitre des limites.
+    int (*choisir_un_nombre)(struct maitre_plus_ou_moins* maitre);
+    // Appelée pour permettre au maitre de choisir un nombre secret (dans les limites).
+    // Note: un résutat négatif indique l'abandon.
+    //       un résultat hors limite termine avec erreur_maitre.
+    resultat_plus_ou_moins (*essai)(struct maitre_plus_ou_moins* maitre,int choix);
+    // Appelée pour que le maitre indique le résultat du choix.
+    // Si le maitre se trompe, le jeu se fini avec comme résultat erreur_maitre.
+    void (*fin)(struct maitre_plus_ou_moins* maitre,resultat_plus_ou_moins resultat_final);
+    // Appelée pour signaler la fin du jeu au maitre.
+} maitre_plus_ou_moins_t;
 
 typedef struct {
     int min;
     int max;
+    maitre_plus_ou_moins_t* maitre;
     joueur_plus_ou_moins_t* joueur;
     int nombre_mystere;
 } plus_ou_moins_t;
 
 
-plus_ou_moins_t* nouveau_jeu_plus_ou_moins(int min,int max,joueur_plus_ou_moins_t* joueur){
+plus_ou_moins_t* nouveau_jeu_plus_ou_moins(int min,int max,
+                                           maitre_plus_ou_moins_t* maitre,
+                                           joueur_plus_ou_moins_t* joueur){
     assert(min<max);
     plus_ou_moins_t* jeu=check_not_null(malloc(sizeof(*jeu)),EX_OSERR,"Out of Memory");
     jeu->min=min;
     jeu->max=max;
+    jeu->maitre=maitre;
     jeu->joueur=joueur;
-    jeu->nombre_mystere=choisir_un_nombre_aleatoire_dans_l_intervale(min,max);
     return jeu;
 }
 
-plus_ou_moins_result plus_ou_moins_essayer_nombre(plus_ou_moins_t* jeu,int essai){
+resultat_plus_ou_moins plus_ou_moins_essayer_nombre(int nombre_mystere,int essai){
     if(essai<0){
-        return abandon;
-    }else if(jeu->nombre_mystere<essai){
+        return abandon_joueur;
+    }else if(nombre_mystere<essai){
         return moins;
-    }else if(jeu->nombre_mystere>essai){
+    }else if(nombre_mystere>essai){
         return plus;
     }else{
         return egal;
@@ -142,14 +187,29 @@ plus_ou_moins_result plus_ou_moins_essayer_nombre(plus_ou_moins_t* jeu,int essai
 }
 
 void plus_ou_moins_jouer(plus_ou_moins_t* jeu){
+    resultat_plus_ou_moins resultat;
+    maitre_plus_ou_moins_t* maitre=jeu->maitre;
     joueur_plus_ou_moins_t* joueur=jeu->joueur;
+    maitre->debut(maitre,jeu->min,jeu->max);
     joueur->debut(joueur,jeu->min,jeu->max);
-    plus_ou_moins_result resultat=plus;
-    do{
-        int choix=joueur->jouer(joueur);
-        resultat=plus_ou_moins_essayer_nombre(jeu,choix);
-        joueur->resultat(joueur,choix,resultat);
-    }while((resultat!=egal)&&(resultat!=abandon));
+    jeu->nombre_mystere=maitre->choisir_un_nombre(maitre);
+    if(jeu->nombre_mystere<0){
+        resultat=abandon_maitre;
+    }else if((jeu->nombre_mystere<jeu->min)
+             ||(jeu->max<jeu->nombre_mystere)){
+        resultat=erreur_maitre;
+    }else{
+        do{
+            int choix=joueur->jouer(joueur);
+            int resultat_attendu=plus_ou_moins_essayer_nombre(jeu->nombre_mystere,choix);
+            resultat=maitre->essai(maitre,choix);
+            if((resultat!=abandon_maitre)&&(resultat!=resultat_attendu)){
+                resultat=erreur_maitre;
+            }
+            joueur->resultat(joueur,choix,resultat);
+        }while((resultat==moins)||(resultat==plus));
+    }
+    maitre->fin(maitre,resultat);
     joueur->fin(joueur,resultat);
 }
 
@@ -159,6 +219,79 @@ void plus_ou_moins_jouer(plus_ou_moins_t* jeu){
 //
 // En ayant ainsi un jeu abstrait, on peut l'utiliser avec divers
 // joueurs, lesquels peuvent avoir différent interfaces utilisateurs.
+//
+// On commence par un maitre automatique
+//
+////////////////////////////////////////////////////////////////////////
+
+typedef struct {
+    int min;
+    int max;    
+    int secret;
+} auto_maitre_data_t;
+
+void auto_maitre_debut(maitre_plus_ou_moins_t* maitre,int min,int max){
+    // Appelée au début du jeu pour informer le maitre des limites.
+    auto_maitre_data_t* data=check_not_null(malloc(sizeof(*data)),EX_OSERR,"Out of Memory");
+    data->min=min;
+    data->max=max;
+    maitre->data=data;
+    printf("jeu:    Choisissez un entier mystere entre %d et %d\n",data->min,data->max);
+}
+
+int auto_maitre_choisir_un_nombre(maitre_plus_ou_moins_t* maitre){
+    // Appelée pour permettre au maitre de choisir un nombre secret (dans les limites).
+    // Note: un résutat négatif indique l'abandon.
+    //       un résultat hors limite termine avec erreur_maitre.
+    auto_maitre_data_t* data=maitre->data;
+    assert(data->min!=data->max);
+    data->secret=(random()%(data->max+1-data->min))+data->min;
+    printf("maitre: J'ai choisi mon nombre mystere.\n");
+    return data->secret;
+}
+
+resultat_plus_ou_moins auto_maitre_essai(maitre_plus_ou_moins_t* maitre,int essai){
+    // Appelée pour que le maitre indique le résultat du choix.
+    // Si le maitre se trompe, le jeu se fini avec comme résultat erreur_maitre.
+    auto_maitre_data_t* data=maitre->data;
+    resultat_plus_ou_moins resultat=plus_ou_moins_essayer_nombre(data->secret,essai);
+    if(essai<0){
+        printf("maitre: %s !\n",resultat_plus_ou_moins_label(resultat));
+    }else{
+        printf("maitre: le nombre mystere est %s le nombre choisi.\n",
+               resultat_plus_ou_moins_label(resultat));
+    }
+    return resultat;
+}
+
+void auto_maitre_fin(unused maitre_plus_ou_moins_t* maitre,resultat_plus_ou_moins resultat_final){
+    // Appelée pour signaler la fin du jeu au maitre.
+    switch(resultat_final){
+      case egal:
+          printf("maitre: Bravo, vous avez trouve le nombre mystere !!!\n");
+          break;
+      case abandon_joueur:
+      case abandon_maitre:
+      case erreur_maitre:
+          printf("jeu:    %s !\n",resultat_plus_ou_moins_label(resultat_final));
+      default:
+          // Should not occur.
+          break;
+    }
+}
+
+
+maitre_plus_ou_moins_t* nouveau_auto_maitre(){
+    maitre_plus_ou_moins_t* maitre=check_not_null(malloc(sizeof(*maitre)),EX_OSERR,"Out of Memory");
+    maitre->debut              = &auto_maitre_debut;
+    maitre->choisir_un_nombre  = &auto_maitre_choisir_un_nombre;
+    maitre->essai              = &auto_maitre_essai;
+    maitre->fin                = &auto_maitre_fin;
+    return maitre;
+}
+
+
+////////////////////////////////////////////////////////////////////////
 //    
 // Ici on représente un joueur humain utilisant un interface utilisateur CLI:
 //
@@ -201,13 +334,15 @@ int cli_jouer(joueur_plus_ou_moins_t* joueur){
     return(demander_un_nombre(data->invite));
 }
 
-void cli_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix,plus_ou_moins_result resultat){
+void cli_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix,resultat_plus_ou_moins resultat){
     // Appelée pour indiquer au joueur le résultat de son choix.
     static const char* label[]={"moins","egal","plus"};
-    indiquer_ordre(label[resultat]);
+    if(resultat<countof(label)){
+        indiquer_ordre(label[resultat]);
+    }
 }
 
-void cli_fin(unused joueur_plus_ou_moins_t* joueur,plus_ou_moins_result resultat_final){
+void cli_fin(unused joueur_plus_ou_moins_t* joueur,resultat_plus_ou_moins resultat_final){
     // Appelée pour signaler la fin du jeu au joueur.
     if(resultat_final==egal){
         printf("Bravo, vous avez trouve le nombre mystere !!!\n");
@@ -237,30 +372,30 @@ joueur_plus_ou_moins_t* nouveau_cli_joueur(){
 typedef struct {
     int min;
     int max;    
-} auto_data_t;
+} auto_joueur_data_t;
 
-void auto_debut(joueur_plus_ou_moins_t* joueur,int min,int max){
+void auto_joueur_debut(joueur_plus_ou_moins_t* joueur,int min,int max){
     // Appelée au début du jeu pour informer le joueur des limites.
-    auto_data_t* data=check_not_null(malloc(sizeof(*data)),EX_OSERR,"Out of Memory");
+    auto_joueur_data_t* data=check_not_null(malloc(sizeof(*data)),EX_OSERR,"Out of Memory");
     data->min=min;
     data->max=max;
     joueur->data=data;
     printf("jeu:    Devinez un entier entre %d et %d\n",data->min,data->max);
 }
 
-int auto_jouer(joueur_plus_ou_moins_t* joueur){
+int auto_joueur_jouer(joueur_plus_ou_moins_t* joueur){
     // Appelée pour permettre au joueur de faire son choix.
     // Note: un résutat négatif indique l'abandon.
-    auto_data_t* data=joueur->data;
+    auto_joueur_data_t* data=joueur->data;
     assert(data->min!=data->max);
     int essai=(data->min+data->max+1)/2;
     printf("joueur: Est-ce %d ?\n",essai);
     return essai;
 }
 
-void auto_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix,plus_ou_moins_result resultat){
+void auto_joueur_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix,resultat_plus_ou_moins resultat){
     // Appelée pour indiquer au joueur le résultat de son choix.
-    auto_data_t* data=joueur->data;
+    auto_joueur_data_t* data=joueur->data;
     static const char* label[]={"moins","egal","plus"};
     printf("jeu:    "); indiquer_ordre(label[resultat]);
     switch(resultat){
@@ -281,7 +416,7 @@ void auto_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix,plus_o
     }
 }
 
-void auto_fin(unused joueur_plus_ou_moins_t* joueur,plus_ou_moins_result resultat_final){
+void auto_joueur_fin(unused joueur_plus_ou_moins_t* joueur,resultat_plus_ou_moins resultat_final){
     // Appelée pour signaler la fin du jeu au joueur.
     if(resultat_final==egal){
         printf("jeu:    Bravo, vous avez trouve le nombre mystere !!!\n");
@@ -293,24 +428,24 @@ void auto_fin(unused joueur_plus_ou_moins_t* joueur,plus_ou_moins_result resulta
 
 joueur_plus_ou_moins_t* nouveau_auto_joueur(){
     joueur_plus_ou_moins_t* joueur=check_not_null(malloc(sizeof(*joueur)),EX_OSERR,"Out of Memory");
-    joueur->debut    = &auto_debut;
-    joueur->jouer    = &auto_jouer;
-    joueur->resultat = &auto_resultat;
-    joueur->fin      = &auto_fin;
+    joueur->debut    = &auto_joueur_debut;
+    joueur->jouer    = &auto_joueur_jouer;
+    joueur->resultat = &auto_joueur_resultat;
+    joueur->fin      = &auto_joueur_fin;
     return joueur;
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Testons les deux joeurs:
+// Testons les deux joueurs:
 //
 ////////////////////////////////////////////////////////////////////////
 
 void test_plus_ou_moins(){
     printf("\n\nJoueur automatique\n\n");
-    plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,nouveau_auto_joueur()));
+    plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,nouveau_auto_maitre(),nouveau_auto_joueur()));
     printf("\n\nJoueur humain (c'est a vous!)\n\n");
-    plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,nouveau_cli_joueur()));
+    plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,nouveau_auto_maitre(),nouveau_cli_joueur()));
 }
 
 
@@ -328,6 +463,7 @@ void test_plus_ou_moins(){
 // 
 ////////////////////////////////////////////////////////////////////////
 
+typedef maitre_plus_ou_moins_t* (*nouveau_maitre_pr)();
 typedef joueur_plus_ou_moins_t* (*nouveau_joueur_pr)();
 
 
@@ -355,10 +491,14 @@ int ask(const char* prompt,const char* no,const char* yes){
     }
 }
 
-void plusieurs_plus_ou_moins(nouveau_joueur_pr joueur_createur){
+
+void plusieurs_plus_ou_moins(nouveau_maitre_pr maitre_createur,
+                             nouveau_joueur_pr joueur_createur){
     int encore=0;
     do{
-        plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,joueur_createur()));
+        plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,
+                                                      maitre_createur(),
+                                                      joueur_createur()));
         encore=ask("Voulez vous essayer encore","non","oui");
     }while(encore>0);
 }
@@ -368,7 +508,9 @@ int main(const int argc,const char* argv[]){
     if((argc>1)&&(strcmp("test",argv[1])==0)){
         test_plus_ou_moins();
     }else{
-        plusieurs_plus_ou_moins(&nouveau_cli_joueur);
+        plusieurs_plus_ou_moins(&nouveau_auto_maitre,&nouveau_cli_joueur);
     }
     return 0;
 }
+
+/* THE END */
