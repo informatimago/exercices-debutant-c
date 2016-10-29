@@ -20,6 +20,51 @@ Le principe est le suivant.
 
 Le but du jeu, bien sûr, est de trouver le nombre mystère en un minimum de coups.
 
+
+*   Faites un compteur de « coups ». Ce compteur devra être une
+    variable que vous incrémenterez à chaque fois que vous passez dans
+    la boucle. Lorsque l'utilisateur a trouvé le nombre mystère, vous
+    lui direz « Bravo, vous avez trouvé le nombre mystère en 8 coups »
+    par exemple.
+
+*   Lorsque l'utilisateur a trouvé le nombre mystère, le programme
+    s'arrête. Pourquoi ne pas demander s'il veut faire une autre
+    partie ?
+
+    Si vous faites ça, il vous faudra faire une boucle qui englobera
+    la quasi-totalité de votre programme. Cette boucle devra se
+    répéter TANT QUE l'utilisateur n'a pas demandé à arrêter le
+    programme. Je vous conseille de rajouter une variable booléenne
+    continuerPartie initialisée à 1 au départ. Si l'utilisateur
+    demande à arrêter le programme, vous mettrez la variable à 0 et le
+    programme s'arrêtera.
+
+*   Implémentez un mode 2 joueurs ! Attention, je veux qu'on ait le
+    choix entre un mode 1 joueur et un mode 2 joueurs !
+
+    Vous devrez donc faire un menu au début de votre programme qui
+    demande à l'utilisateur le mode de jeu qui l'intéresse.
+
+    La seule chose qui changera entre les deux modes de jeu, c'est la
+    génération du nombre mystère. Dans un cas ce sera un rand() comme
+    on a vu, dans l'autre cas ça sera… un scanf.
+
+*   Créez plusieurs niveaux de difficulté. Au début, faites un menu
+    qui demande le niveau de difficulté. Par exemple :
+
+        1 = entre 1 et 100 ;
+
+        2 = entre 1 et 1000 ;
+
+        3 = entre 1 et 10000.
+
+    Si vous faites ça, vous devrez changer votre constante MAX… Eh
+    oui, ça ne peut plus être une constante si la valeur doit changer
+    au cours du programme ! Renommez donc cette variable en
+    nombreMaximum (vous prendrez soin d'enlever le mot-clé const sinon
+    ça sera toujours une constante !). La valeur de cette variable
+    dépendra du niveau qu'on aura choisi.
+
 */
 
 #include <stdio.h>
@@ -32,10 +77,21 @@ Le but du jeu, bien sûr, est de trouver le nombre mystère en un minimum de cou
 #include <unistd.h>
 #include <sys/types.h>
 #include <assert.h>
+#include <libgen.h>
 
 #define unused   __attribute__ ((unused))
 #define noreturn __attribute__ ((__noreturn__))
 #define countof(a) (sizeof(a)/sizeof(a[0]))
+
+#define stringify(thing) #thing
+#define my_assert(expression) \
+    if(!(expression)){ \
+        fprintf(stderr,"%s:%d: in function %s: Assertion %s failed.\n",\
+                __FILE__,__LINE__,__FUNCTION__,stringify(expression)); \
+        abort(); }
+
+const int SHOULD_NOT_OCCUR=(0);
+#define should_not_occur() my_assert(SHOULD_NOT_OCCUR)
 
 
 noreturn
@@ -74,6 +130,25 @@ void check_error_with_errno(int result,int status,const char* formatControl,...)
     }
 }
 
+char* string_copy(const char* string){
+    char* copy=check_not_null(malloc(1+strlen(string)),EX_OSERR,"Out of Memory");
+    strcpy(copy,string);
+    return copy;
+}
+
+int expi(int base,int power){
+    int exp=1;
+    while(power!=0){
+        if(power&1){
+            exp*=base;
+            --power;
+        }else{
+            exp*=exp;
+            power/=2;
+        }
+    }
+    return exp;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -88,6 +163,94 @@ void initialiser(){
 int choisir_un_nombre_aleatoire_dans_l_intervale(int min,int max){
     return random()%(max-min+1)+min;
 }
+
+char* read_word(FILE* input){
+    static char line[81];
+    static char word[81];
+    if(fgets(line,sizeof(line),input)){
+        int n=sscanf(line,"%80s",word);
+        while((line[strlen(line)-1]!='\n')
+              &&fgets(line,sizeof(line),input));
+        if(n==0){
+            return 0;
+        }else{
+            return word;
+        }
+    }
+    return 0;
+}
+
+int demander_un_nombre(const char* invite){
+    printf("%s : ",invite);
+    fflush(stdout); // tres important!
+    fflush(stdin); // important, in case of invalid input.
+    int nombre=0;
+    char* word=read_word(stdin);
+    sscanf(word,"%20i",&nombre);
+    return nombre;
+}
+
+void clear_screen(){
+    // TODO: use termcap/terminfo to determine if we can better send a control sequence to clear the screen.
+    char* slines=getenv("LINES");
+    int lines=80;
+    if(slines!=0){
+        sscanf(slines,"%20i",&lines);
+    }
+    while(0<=--lines){
+        printf("\n");
+    }
+    fflush(stdout);
+}
+
+
+typedef struct {
+    int choix;
+    const char* labels[8];
+} option_t;
+
+option_t options_booleennes[]={ {0,{"non","no","n",0}},
+                                {1,{"oui","yes","o","y",0}},
+                                {0,{0}}};
+                    
+
+int demander(const char* prompt,const option_t options[]){
+    while(1){
+        printf("%s(",prompt);
+        const char* sep="";
+        int i;
+        for(i=0;options[i].labels[0]!=0;++i){
+            int j;
+            for(j=0;options[i].labels[j]!=0;++j){
+                printf("%s%s",sep,options[i].labels[j]);
+                sep="/";
+            }
+        }
+        printf(") ? ");
+        fflush(stdout);
+        fflush(stdin);
+        clearerr(stdin);
+        char* word=read_word(stdin);
+        if(word){
+           int i;
+            for(i=0;options[i].labels[0]!=0;++i){
+                int j;
+                for(j=0;options[i].labels[j]!=0;++j){
+                    if(strcmp(word,options[i].labels[j])==0){
+                        return options[i].choix;
+                    }
+                }
+            }
+            printf("Reponse invalide: %s\n",word);
+        }else if(feof(stdin)){
+            return -1;
+        }else{
+            fprintf(stderr,"Error while reading answer\n");
+            return -2;
+        }
+    }
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -112,6 +275,11 @@ typedef enum {moins=0,
               abandon_maitre,
 } resultat_plus_ou_moins;
 
+option_t options_comparaison[]={ {moins,{"moins","<","-",0}},
+                                 {egal,{"egal","=",0}},
+                                 {plus,{"plus",">","+",0}},
+                                 {abandon_maitre,{"abandonner","quitter","abort","quit",0}},
+                                 {0,{0}}};
 
 const char* resultat_plus_ou_moins_label(resultat_plus_ou_moins resultat){
     switch(resultat){
@@ -236,7 +404,7 @@ void auto_maitre_debut(maitre_plus_ou_moins_t* maitre,int min,int max){
     data->min=min;
     data->max=max;
     maitre->data=data;
-    printf("jeu:    Choisissez un entier mystere entre %d et %d\n",data->min,data->max);
+    printf("jeu :    Choisissez un entier mystere entre %d et %d\n",data->min,data->max);
 }
 
 int auto_maitre_choisir_un_nombre(maitre_plus_ou_moins_t* maitre){
@@ -246,7 +414,7 @@ int auto_maitre_choisir_un_nombre(maitre_plus_ou_moins_t* maitre){
     auto_maitre_data_t* data=maitre->data;
     assert(data->min!=data->max);
     data->secret=(random()%(data->max+1-data->min))+data->min;
-    printf("maitre: J'ai choisi mon nombre mystere.\n");
+    printf("maitre : J'ai choisi mon nombre mystere.\n");
     return data->secret;
 }
 
@@ -256,9 +424,9 @@ resultat_plus_ou_moins auto_maitre_essai(maitre_plus_ou_moins_t* maitre,int essa
     auto_maitre_data_t* data=maitre->data;
     resultat_plus_ou_moins resultat=plus_ou_moins_essayer_nombre(data->secret,essai);
     if(essai<0){
-        printf("maitre: %s !\n",resultat_plus_ou_moins_label(resultat));
+        printf("maitre : %s !\n",resultat_plus_ou_moins_label(resultat));
     }else{
-        printf("maitre: le nombre mystere est %s le nombre choisi.\n",
+        printf("maitre : le nombre mystere est %s le nombre choisi.\n",
                resultat_plus_ou_moins_label(resultat));
     }
     return resultat;
@@ -268,14 +436,15 @@ void auto_maitre_fin(unused maitre_plus_ou_moins_t* maitre,resultat_plus_ou_moin
     // Appelée pour signaler la fin du jeu au maitre.
     switch(resultat_final){
       case egal:
-          printf("maitre: Bravo, vous avez trouve le nombre mystere !!!\n");
+          printf("maitre : Bravo, vous avez trouve le nombre mystere !!!\n");
           break;
       case abandon_joueur:
       case abandon_maitre:
       case erreur_maitre:
-          printf("jeu:    %s !\n",resultat_plus_ou_moins_label(resultat_final));
+          printf("jeu :    %s !\n",resultat_plus_ou_moins_label(resultat_final));
+          break;
       default:
-          // Should not occur.
+          should_not_occur();
           break;
     }
 }
@@ -292,33 +461,84 @@ maitre_plus_ou_moins_t* nouveau_auto_maitre(){
 
 
 ////////////////////////////////////////////////////////////////////////
-//    
-// Ici on représente un joueur humain utilisant un interface utilisateur CLI:
+//
+// Maintenant, on représente un maitre humain utilisant un interface
+// utilisateur CLI:
 //
 ////////////////////////////////////////////////////////////////////////
 
-int demander_un_nombre(const char* invite){
-    printf("%s : ",invite);
-    fflush(stdout); // tres important!
-    int nombre=0;
-    scanf("%i",&nombre);
-    return nombre;
+typedef struct {
+    int min;
+    int max;
+    int secret;
+}  cli_maitre_data_t;
+
+
+void cli_maitre_debut(maitre_plus_ou_moins_t* maitre,int min,int max){
+    // Appelée au début du jeu pour informer le maitre des limites.
+    cli_maitre_data_t* data=check_not_null(malloc(sizeof(*data)),EX_OSERR,"Out of Memory");
+    data->min=min;
+    data->max=max;
+    maitre->data=data;
 }
 
-void indiquer_ordre(const char* ordre){
-    printf("C'est %s !\n",ordre);
+int cli_maitre_choisir_un_nombre(maitre_plus_ou_moins_t* maitre){
+    cli_maitre_data_t* data=maitre->data;
+    printf("jeu :    Choisissez un entier mystere entre %d et %d\n",data->min,data->max);
+    data->secret=demander_un_nombre("maitre");
+    clear_screen();
+    return data->secret;
+}
+
+resultat_plus_ou_moins cli_maitre_essai(unused maitre_plus_ou_moins_t* maitre,int choix){
+    // Appelée pour que le maitre indique le résultat du choix.
+    // Si le maitre se trompe, le jeu se fini avec comme résultat erreur_maitre.
+    if(choix<0){
+        return abandon_joueur;
+    }
+    printf("jeu :    le joueur a choisi %d; est-ce moins, plus ou egal au nombre mystere?\n",choix);
+    resultat_plus_ou_moins resultat=demander("maitre : ",options_comparaison);
+    return resultat;
+}
+
+void cli_maitre_fin(unused maitre_plus_ou_moins_t* maitre,resultat_plus_ou_moins resultat_final){
+    // Appelée pour signaler la fin du jeu au maitre.
+    auto_maitre_fin(maitre,resultat_final);
+}
+
+
+maitre_plus_ou_moins_t* nouveau_cli_maitre(){
+    maitre_plus_ou_moins_t* maitre=check_not_null(malloc(sizeof(*maitre)),EX_OSERR,"Out of Memory");
+    maitre->debut             = &cli_maitre_debut;
+    maitre->choisir_un_nombre = &cli_maitre_choisir_un_nombre;
+    maitre->essai             = &cli_maitre_essai;
+    maitre->fin               = &cli_maitre_fin;
+    return maitre;
+}
+
+
+////////////////////////////////////////////////////////////////////////
+//    
+// Ici on représente un joueur humain utilisant un interface
+// utilisateur CLI:
+//
+////////////////////////////////////////////////////////////////////////
+
+
+void indiquer_ordre(const char* ordre,int choix){
+    printf("jeu :    Le nombre mystere est %s %d!\n",ordre,choix);
 }
 
 typedef struct {
     int min;
     int max;
     char* invite;
-}  cli_data_t;
+}  cli_joueur_data_t;
 
 
-void cli_debut(joueur_plus_ou_moins_t* joueur,int min,int max){
+void cli_joueur_debut(joueur_plus_ou_moins_t* joueur,int min,int max){
     // Appelée au début du jeu pour informer le joueur des limites.
-    cli_data_t* data=check_not_null(malloc(sizeof(*data)),EX_OSERR,"Out of Memory");
+    cli_joueur_data_t* data=check_not_null(malloc(sizeof(*data)),EX_OSERR,"Out of Memory");
     data->min=min;
     data->max=max;
     int size=1+snprintf(0,0,"Devinez un entier entre %d et %d",data->min,data->max);
@@ -327,39 +547,38 @@ void cli_debut(joueur_plus_ou_moins_t* joueur,int min,int max){
     joueur->data=data;
 }
 
-int cli_jouer(joueur_plus_ou_moins_t* joueur){
+int cli_joueur_jouer(joueur_plus_ou_moins_t* joueur){
     // Appelée pour permettre au joueur de faire son choix.
     // Note: un résutat négatif indique l'abandon.
-    cli_data_t* data=joueur->data;
+    cli_joueur_data_t* data=joueur->data;
     return(demander_un_nombre(data->invite));
 }
 
-void cli_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix,resultat_plus_ou_moins resultat){
+
+void cli_joueur_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix,resultat_plus_ou_moins resultat){
     // Appelée pour indiquer au joueur le résultat de son choix.
-    static const char* label[]={"moins","egal","plus"};
-    if(resultat<countof(label)){
-        indiquer_ordre(label[resultat]);
+    if(resultat<=plus){
+        indiquer_ordre(resultat_plus_ou_moins_label(resultat),choix);
     }
 }
 
-void cli_fin(unused joueur_plus_ou_moins_t* joueur,resultat_plus_ou_moins resultat_final){
+void cli_joueur_fin(unused joueur_plus_ou_moins_t* joueur,resultat_plus_ou_moins resultat_final){
     // Appelée pour signaler la fin du jeu au joueur.
     if(resultat_final==egal){
-        printf("Bravo, vous avez trouve le nombre mystere !!!\n");
-    }else{
-        printf("Lacheur !\n");
+        printf("joueur : Bravo, vous avez trouve le nombre mystere !!!\n");
     }
 }
 
 
 joueur_plus_ou_moins_t* nouveau_cli_joueur(){
     joueur_plus_ou_moins_t* joueur=check_not_null(malloc(sizeof(*joueur)),EX_OSERR,"Out of Memory");
-    joueur->debut    = &cli_debut;
-    joueur->jouer    = &cli_jouer;
-    joueur->resultat = &cli_resultat;
-    joueur->fin      = &cli_fin;
+    joueur->debut    = &cli_joueur_debut;
+    joueur->jouer    = &cli_joueur_jouer;
+    joueur->resultat = &cli_joueur_resultat;
+    joueur->fin      = &cli_joueur_fin;
     return joueur;
 }
+
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -380,7 +599,7 @@ void auto_joueur_debut(joueur_plus_ou_moins_t* joueur,int min,int max){
     data->min=min;
     data->max=max;
     joueur->data=data;
-    printf("jeu:    Devinez un entier entre %d et %d\n",data->min,data->max);
+    printf("jeu :    Devinez un entier entre %d et %d\n",data->min,data->max);
 }
 
 int auto_joueur_jouer(joueur_plus_ou_moins_t* joueur){
@@ -389,15 +608,14 @@ int auto_joueur_jouer(joueur_plus_ou_moins_t* joueur){
     auto_joueur_data_t* data=joueur->data;
     assert(data->min!=data->max);
     int essai=(data->min+data->max+1)/2;
-    printf("joueur: Est-ce %d ?\n",essai);
+    printf("joueur : Est-ce %d ?\n",essai);
     return essai;
 }
 
 void auto_joueur_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix,resultat_plus_ou_moins resultat){
     // Appelée pour indiquer au joueur le résultat de son choix.
     auto_joueur_data_t* data=joueur->data;
-    static const char* label[]={"moins","egal","plus"};
-    printf("jeu:    "); indiquer_ordre(label[resultat]);
+    indiquer_ordre(resultat_plus_ou_moins_label(resultat),choix);
     switch(resultat){
       case moins:
           data->max=choix;
@@ -408,10 +626,10 @@ void auto_joueur_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix
       case egal:
           data->min=choix;
           data->max=choix;
-          printf("joueur: J'ai trouvé %d !\n",choix);
+          printf("joueur : J'ai trouvé %d !\n",choix);
           break;
       default:
-          assert(0); // should not occur.
+          should_not_occur();
           break;
     }
 }
@@ -419,9 +637,9 @@ void auto_joueur_resultat(unused joueur_plus_ou_moins_t* joueur,unused int choix
 void auto_joueur_fin(unused joueur_plus_ou_moins_t* joueur,resultat_plus_ou_moins resultat_final){
     // Appelée pour signaler la fin du jeu au joueur.
     if(resultat_final==egal){
-        printf("jeu:    Bravo, vous avez trouve le nombre mystere !!!\n");
+        printf("jeu :    Bravo, vous avez trouve le nombre mystere !!!\n");
     }else{
-        printf("jeu:    Lacheur !\n");
+        printf("jeu :    Lacheur !\n");
     }
 }
 
@@ -441,11 +659,11 @@ joueur_plus_ou_moins_t* nouveau_auto_joueur(){
 //
 ////////////////////////////////////////////////////////////////////////
 
-void test_plus_ou_moins(){
+void test_plus_ou_moins(int min,int max){
     printf("\n\nJoueur automatique\n\n");
-    plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,nouveau_auto_maitre(),nouveau_auto_joueur()));
+    plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(min,max,nouveau_auto_maitre(),nouveau_auto_joueur()));
     printf("\n\nJoueur humain (c'est a vous!)\n\n");
-    plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,nouveau_auto_maitre(),nouveau_cli_joueur()));
+    plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(min,max,nouveau_auto_maitre(),nouveau_cli_joueur()));
 }
 
 
@@ -467,48 +685,72 @@ typedef maitre_plus_ou_moins_t* (*nouveau_maitre_pr)();
 typedef joueur_plus_ou_moins_t* (*nouveau_joueur_pr)();
 
 
-int ask(const char* prompt,const char* no,const char* yes){
-    while(1){
-        printf("%s (%s/%s) ? ",prompt,no,yes);
-        fflush(stdout);
-        fflush(stdin);
-        char buffer[81];
-        clearerr(stdin);
-        if(scanf("%80s",buffer)){
-            if(strcmp(no,buffer)==0){
-                return 0;
-            }
-            if(strcmp(yes,buffer)==0){
-                return 1;
-            }
-            printf("Reponse invalide: %s\n",buffer);
-        }else if(feof(stdin)){
-            return -1;
-        }else{
-            fprintf(stderr,"Error while reading answer\n");
-            return -2;
-        }
-    }
-}
 
-
-void plusieurs_plus_ou_moins(nouveau_maitre_pr maitre_createur,
+void plusieurs_plus_ou_moins(int min,int max,
+                             nouveau_maitre_pr maitre_createur,
                              nouveau_joueur_pr joueur_createur){
     int encore=0;
     do{
-        plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,100,
+        plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(min,max,
                                                       maitre_createur(),
                                                       joueur_createur()));
-        encore=ask("Voulez vous essayer encore","non","oui");
+        encore=demander("Voulez vous essayer encore",options_booleennes);
     }while(encore>0);
+}
+
+void usage(const char* pname){
+    size_t len=strlen(pname);
+    char* spaces=check_not_null(malloc(len+1),EX_OSERR,"Out of Memory");
+    memset(spaces,' ',len);spaces[len]='\0';
+    printf("%s usage:\n\n",pname);
+    printf("\t%s [ test | maitre=auto|cli \\\n",pname);
+    printf("\t%s | joueur=auto|cli | plusieurs] \\\n",spaces);
+    printf("\t%s | niveau=1|2|3|4|5|6 ]\n\n",spaces);
 }
 
 int main(const int argc,const char* argv[]){
     initialiser();
-    if((argc>1)&&(strcmp("test",argv[1])==0)){
-        test_plus_ou_moins();
+    int i;
+    int plusieurs=0;
+    int niveau=1;
+    int max=100;
+    nouveau_maitre_pr maitre_pr=&nouveau_auto_maitre;
+    nouveau_joueur_pr joueur_pr=&nouveau_cli_joueur;
+    for(i=1;i<argc;++i){
+        if(strcmp("test",argv[i])==0){
+            test_plus_ou_moins(1,max);
+            return 0;
+        }else if(strcmp("maitre=auto",argv[i])==0){
+            maitre_pr=&nouveau_auto_maitre;
+        }else if(strcmp("maitre=cli",argv[i])==0){
+            maitre_pr=&nouveau_cli_maitre;
+        }else if(strcmp("joueur=auto",argv[i])==0){
+            joueur_pr=&nouveau_auto_joueur;
+        }else if(strcmp("joueur=cli",argv[i])==0){
+            joueur_pr=&nouveau_cli_joueur;
+        }else if(strncmp("niveau=",argv[i],strlen("niveau="))==0){
+            int nouveau_niveau=0;
+            sscanf(argv[i]+strlen("niveau="),"%20i",&nouveau_niveau);
+            if((nouveau_niveau<0)||(6<nouveau_niveau)){
+                fprintf(stderr,"Invalid level: %d in argument %s\n",nouveau_niveau,argv[i]);
+                usage(basename(string_copy(argv[0])));
+                exit(EX_USAGE);
+            }else{
+                niveau=nouveau_niveau;
+            }
+        }else if(strcmp("plusieurs",argv[i])==0){
+            plusieurs=1;
+        }else{
+            fprintf(stderr,"Invalid argument: %s\n",argv[i]);
+            usage(basename(string_copy(argv[0])));
+            exit(EX_USAGE);
+        }
+    }
+    max=10*expi(10,niveau);
+    if(plusieurs){
+        plusieurs_plus_ou_moins(1,max,maitre_pr,joueur_pr);
     }else{
-        plusieurs_plus_ou_moins(&nouveau_auto_maitre,&nouveau_cli_joueur);
+        plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,max,maitre_pr(),joueur_pr()));
     }
     return 0;
 }

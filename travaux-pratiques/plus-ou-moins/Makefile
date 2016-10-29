@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-# CFLAGS=-g3 -ggdb
+CFLAGS=-g3 -ggdb
 
 PROGRAMMES = \
 	plus-ou-moins \
