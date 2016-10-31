@@ -1,5 +1,6 @@
 SHELL=/bin/bash
 CFLAGS=-g3 -ggdb
+LDFLAGS=-L/opt/local/lib -lgc
 
 PROGRAMMES = \
 	plus-ou-moins \

@@ -6,7 +6,8 @@ Le principe est le suivant.
 
     L'ordinateur tire au sort un nombre entre 1 et 100.
 
-    Il vous demande de deviner le nombre. Vous entrez donc un nombre entre 1 et 100.
+    Il vous demande de deviner le nombre. Vous entrez donc un nombre
+    entre 1 et 100.
 
     L'ordinateur compare le nombre que vous avez entré avec le nombre
     « mystère » qu'il a tiré au sort. Il vous dit si le nombre mystère
@@ -18,7 +19,8 @@ Le principe est le suivant.
 
     Et ainsi de suite, jusqu'à ce que vous trouviez le nombre mystère.
 
-Le but du jeu, bien sûr, est de trouver le nombre mystère en un minimum de coups.
+Le but du jeu, bien sûr, est de trouver le nombre mystère en un
+minimum de coups.
 
 
 *   Faites un compteur de « coups ». Ce compteur devra être une
@@ -188,10 +190,10 @@ int choisir_un_nombre_aleatoire_dans_l_intervale(int min,int max){
 
 
 // Using scanf to read numbers when the input is not a number doesn't
-// eat any input. This leads to infinite loops.  So instead of using
+// eat any input.  This leads to infinite loops.  So instead of using
 // bare scanf on stdin, we read it line-by-line with fgets, and use
-// sscanf to read words and numbers.  Thus next time, we get a new line.
-
+// sscanf to read words and numbers.  Thus next time, we get a new
+// line, and new input.
 
 char* read_word(FILE* input){
     static char line[81];
@@ -728,61 +730,146 @@ void plusieurs_plus_ou_moins(int min,int max,
     }while(encore>0);
 }
 
+
+
 void usage(const char* pname){
     size_t len=strlen(pname);
     char* spaces=check_not_null(malloc(len+1),EX_OSERR,"Out of Memory");
     memset(spaces,' ',len);spaces[len]='\0';
     printf("%s usage:\n\n",pname);
-    printf("\t%s [ test | maitre=auto|cli \\\n",pname);
+    printf("\t%s [ test | menu | maitre=auto|cli \\\n",pname);
     printf("\t%s | joueur=auto|cli | plusieurs] \\\n",spaces);
     printf("\t%s | niveau=1|2|3|4|5|6 ]\n\n",spaces);
 }
 
+typedef struct {
+    int plusieurs;
+    int niveau;
+    nouveau_maitre_pr maitre_pr;
+    nouveau_joueur_pr joueur_pr;
+} configuration_t;
+
+configuration_t* configuration_nouveau(){
+    configuration_t* configuration=check_not_null(malloc(sizeof(*configuration)),
+                                                  EX_OSERR,"Out of Memory");
+    configuration->plusieurs=0;
+    configuration->niveau=1;
+    configuration->maitre_pr=&nouveau_auto_maitre;
+    configuration->joueur_pr=&nouveau_cli_joueur;
+    return configuration;
+}
+
+const char* boolean_label(int boolean){
+    return boolean?"oui":"non";
+}
+
+const char* cli_label(int cli){
+    return cli?"cli":"auto";
+}
+
+option_t options_configuration[]={ {0,{"v","ok","valider",0}},
+                                       {1,{"p","plusieurs",0}},
+                                       {2,{"m","maitre",0}},
+                                       {3,{"j","joueur",0}},
+                                       {4,{"n","niveau",0}},
+                                       {0,{0}}};
+
+void configuration_menu(configuration_t* configuration){
+    int maitre_cli=(configuration->maitre_pr==&nouveau_cli_maitre);
+    int joueur_cli=(configuration->joueur_pr==&nouveau_cli_joueur);
+    while(1){
+        printf("\nConfiguration:\n");
+        printf("  (p) plusieurs parties : %s\n",
+               boolean_label(configuration->plusieurs));
+        printf("  (n) niveau            : %d\n",configuration->niveau);
+        printf("  (m) maitre            : %s\n",cli_label(maitre_cli));
+        printf("  (j) joueur            : %s\n",cli_label(joueur_cli));
+        printf("  (v) valider\n");
+        printf("\n");
+        switch(demander("Choix",options_configuration)){
+          case 0:
+              return;
+          case 1:
+              configuration->plusieurs=(!configuration->plusieurs);
+              break;
+          case 2:
+              maitre_cli=(!maitre_cli);
+              configuration->maitre_pr=(maitre_cli
+                                        ?&nouveau_cli_maitre
+                                        :&nouveau_auto_maitre);
+              break;
+          case 3:
+              joueur_cli=(!joueur_cli);
+              configuration->joueur_pr=(joueur_cli
+                                        ?&nouveau_cli_joueur
+                                        :&nouveau_auto_joueur);
+              break;
+          case 4:{
+              int niveau=demander_un_nombre("Niveau (entre 1 et 6 inclus): ");
+              if((niveau<1)||(6<niveau)){
+                  fprintf(stderr,"Niveau %d invalide\n",niveau);
+              }else{
+                  configuration->niveau=niveau;
+              }
+              break;
+          }
+        }
+    }
+}
+
+
 int main(const int argc,const char* argv[]){
     initialiser();
+    configuration_t* configuration=configuration_nouveau();
     int i;
-    int plusieurs=0;
-    int niveau=1;
     int max=100;
-    nouveau_maitre_pr maitre_pr=&nouveau_auto_maitre;
-    nouveau_joueur_pr joueur_pr=&nouveau_cli_joueur;
     for(i=1;i<argc;++i){
         if(strcmp("test",argv[i])==0){
             test_plus_ou_moins(1,max);
             return 0;
+        }else if(strcmp("menu",argv[i])==0){
+            configuration_menu(configuration);
         }else if(strcmp("maitre=auto",argv[i])==0){
-            maitre_pr=&nouveau_auto_maitre;
+            configuration->maitre_pr=&nouveau_auto_maitre;
         }else if(strcmp("maitre=cli",argv[i])==0){
-            maitre_pr=&nouveau_cli_maitre;
+            configuration->maitre_pr=&nouveau_cli_maitre;
         }else if(strcmp("joueur=auto",argv[i])==0){
-            joueur_pr=&nouveau_auto_joueur;
+            configuration->joueur_pr=&nouveau_auto_joueur;
         }else if(strcmp("joueur=cli",argv[i])==0){
-            joueur_pr=&nouveau_cli_joueur;
+            configuration->joueur_pr=&nouveau_cli_joueur;
         }else if(strncmp("niveau=",argv[i],strlen("niveau="))==0){
             int nouveau_niveau=0;
             sscanf(argv[i]+strlen("niveau="),"%20i",&nouveau_niveau);
             if((nouveau_niveau<0)||(6<nouveau_niveau)){
-                fprintf(stderr,"Invalid level: %d in argument %s\n",nouveau_niveau,argv[i]);
+                fprintf(stderr,"Invalid level: %d in argument %s\n",
+                        nouveau_niveau,argv[i]);
                 usage(basename(string_copy(argv[0])));
                 exit(EX_USAGE);
             }else{
-                niveau=nouveau_niveau;
+                configuration->niveau=nouveau_niveau;
             }
         }else if(strcmp("plusieurs",argv[i])==0){
-            plusieurs=1;
+            configuration->plusieurs=1;
         }else{
             fprintf(stderr,"Invalid argument: %s\n",argv[i]);
             usage(basename(string_copy(argv[0])));
             exit(EX_USAGE);
         }
     }
-    max=10*expi(10,niveau);
-    if(plusieurs){
-        plusieurs_plus_ou_moins(1,max,maitre_pr,joueur_pr);
+    max=10*expi(10,configuration->niveau);
+    if(configuration->plusieurs){
+        plusieurs_plus_ou_moins(1,max,
+                                configuration->maitre_pr,
+                                configuration->joueur_pr);
     }else{
-        plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,max,maitre_pr(),joueur_pr()));
+        plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,max,
+                                                      configuration->maitre_pr(),
+                                                      configuration->joueur_pr()));
     }
     return 0;
 }
+
+// PS: It is assumed to be compiled with BoehmGC.
+// cc -g3 -ggdb  -L/opt/local/lib -lgc  plus-ou-moins-2.c   -o plus-ou-moins-2
 
 /* THE END */
