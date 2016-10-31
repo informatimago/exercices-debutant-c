@@ -1,3 +1,38 @@
+// -*- mode:c;coding:utf-8 -*-
+//****************************************************************************
+//FILE:               plus-ou-moins-2.c
+//LANGUAGE:           c
+//SYSTEM:             POSIX
+//USER-INTERFACE:     NONE
+//DESCRIPTION
+//
+//    Jeu de plus-ou-moins.
+//    Version avancée, avec toutes les options.
+//
+//AUTHORS
+//    <PJB> Pascal J. Bourguignon <pjb@informatimago.com>
+//MODIFICATIONS
+//    2016-10-31 <PJB> Completed.
+//BUGS
+//LEGAL
+//    AGPL3
+//
+//    Copyright Pascal J. Bourguignon 2016 - 2016
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU Affero General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU Affero General Public License for more details.
+//
+//    You should have received a copy of the GNU Affero General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//****************************************************************************
+
 /*
 
 Un petit jeu que j'appelle « Plus ou moins ».
@@ -731,16 +766,11 @@ void plusieurs_plus_ou_moins(int min,int max,
 }
 
 
-
-void usage(const char* pname){
-    size_t len=strlen(pname);
-    char* spaces=check_not_null(malloc(len+1),EX_OSERR,"Out of Memory");
-    memset(spaces,' ',len);spaces[len]='\0';
-    printf("%s usage:\n\n",pname);
-    printf("\t%s [ test | menu | maitre=auto|cli \\\n",pname);
-    printf("\t%s | joueur=auto|cli | plusieurs] \\\n",spaces);
-    printf("\t%s | niveau=1|2|3|4|5|6 ]\n\n",spaces);
-}
+////////////////////////////////////////////////////////////////////////
+//
+// main, avec menu.
+//
+////////////////////////////////////////////////////////////////////////
 
 typedef struct {
     int plusieurs;
@@ -817,6 +847,15 @@ void configuration_menu(configuration_t* configuration){
     }
 }
 
+void usage(const char* pname){
+    size_t len=strlen(pname);
+    char* spaces=check_not_null(malloc(len+1),EX_OSERR,"Out of Memory");
+    memset(spaces,' ',len);spaces[len]='\0';
+    printf("%s usage:\n\n",pname);
+    printf("\t%s [ test | menu | maitre=auto|cli \\\n",pname);
+    printf("\t%s | joueur=auto|cli | plusieurs] \\\n",spaces);
+    printf("\t%s | niveau=1|2|3|4|5|6 ]\n\n",spaces);
+}
 
 int main(const int argc,const char* argv[]){
     initialiser();
