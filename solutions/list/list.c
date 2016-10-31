@@ -723,7 +723,7 @@ struct entete_liste_de_int* nouvelle_liste_de_int(int count,int element,...){
     struct entete_liste_de_int  liste_initialisee=SLIST_HEAD_INITIALIZER(liste_initialisee);
     memcpy(liste,&liste_initialisee,sizeof(liste_initialisee));
     SLIST_INIT(liste);    // initialization de la liste
-    
+
     // Next we allocate the element nodes.
     va_list arguments;
     switch(count){
@@ -756,7 +756,7 @@ struct entete_liste_de_int* nouvelle_liste_de_int(int count,int element,...){
           return liste;
       }
     }
-}    
+}
 
 
 void fprint_liste_de_int(FILE* out,struct entete_liste_de_int* liste){

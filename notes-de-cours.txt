@@ -50,7 +50,7 @@ différement le texte analysé: atoi considère un entier décimal, et
 retourne 0 en cas d'erreur;  scanf %i accepte aussi des entiers en
 base 8 (préfixé avec a 0) et en base 16 (préfixé avec 0x).
 
-% scanf-vs-atoi 123 0123 0986 0x123 0xhello 
+% scanf-vs-atoi 123 0123 0986 0x123 0xhello
 atoi("123")                          ->  123
 sscanf("123","%i",&value) -> 1, value =  123
 
@@ -132,7 +132,7 @@ peut avoir des définitions récursives (séries).  Celà ce traduira au
 final par des itérations (des boucles de programme), et des
 assignement répétés.
 
-       
+
 
 
 Conditions

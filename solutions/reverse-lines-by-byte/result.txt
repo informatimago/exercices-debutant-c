@@ -3,17 +3,17 @@ etartsnomed ot tub ,evisneherpmoc eb ot dednetni ton si tI
 .stroppus scamE taht stes retcarahc eht fo emos
 
 :selpmaxe IICSA-noN
-u¡ÄnoB ,tsuthµÃ ereT ,¤Ã¤Ãvi¤Ãp ¤Ã¤ÃvyH ,ttoG ŸÃ¼ÃrG ,!aloH¡Â :eporuE  
-ƒá‘ƒáƒá¯ƒá ƒáƒá›ƒáƒá’ƒá ,‚Ï±ÎƒÏ ¬Î¹ÎµÎ“Î ,!µÐ‚Ñ¹ÐƒÑ²Ð‚ÑÑ²Ð°Ð€Ñ´Ð—Ð ,ned ½ÃrboD ,!‡Ä›ÅezC          
-ˆá‹ˆá ˆá :acirfA  
-…ÙƒÙŠÙ„Ù¹Ø …Ù§Ø„Ù‘Ù³Ø„Ù§Ø ,×•×œ×©× :tsaE raeN/elddiM  
-,‡­à¬¬à¿¬à£¬à­à¶¬à ,‚´à°´à¾´à•´àµà¸´à®´à¨´à ,°²à¾²à•²à³à¸²à®²à¨²à ,‡¥à¤¤à¥à¸¤à®¤à¨¤à ,‡«à¤ªà«à¸ªà®ªà¨ªà :aisA htuoS  
-Ž¼à¦½à‚½àº½à£½à‹¼àº½à‘½à–½à‹¼à¦½à²½à¤½à‹¼à²¾à€½à–½à ,‚°à°°à¾°à•°à±à¸°à®°à¨°à ,¯à®®à•®à¯à•®à£®àµ®à ,Š·à±¶à€·à·à¶¶à”·àº¶à†¶à              
-n¡ºáb o ÃhC ,š¸à±¸à£¸à„¸àµ¸à”¸àª¸à±¸à§¸àª¸à ,«€á•€á¬€áœ€á‚€á¹€áº€á„€á™€á ,µºà”ºàºà²ºàšºà°ºàªºà ,šžá½žáŸžá”žá¶žášžá†Ÿá‡žá :aisA tsaE htuoS  
-”šì¸„ì˜•í•…ëˆ•ì ,¯ã¡ã«ã“‚ã“ã ,¨™æ©—æ ,½¥å ½ä :aisA tsaE  
-¡–â  p olleh ¢€â dlrow ˆˆâ p €ˆâ ,• â‡ â‡ â‘ â“ â ,ed­ÅaµÄui‰Ä oÄnaÅo¥ÄE :csiM  
-)¼™ç‹–é,£°æƒ…å(CSK ,)º™ç‹–é,—°æƒ…å(SIJ ,)¼™ç‹–é,£°æƒ…å(5GIB ,)‘å€¼å,”°æƒ…å(BG :yteirav KJC  
-!µÐ‚Ñ¹ÐƒÑ²Ð‚ÑÑ²Ð°Ð€Ñ´Ð—Ð ,×•×œ×©× ,‚Ï±ÎƒÏ ¬Î¹ÎµÎ“Î ,ed­ÅaµÄui‰Ä oÄnaÅo¥ÄE :tesrahc edocinU  
+u¡ÄnoB ,tsuthµÃ ereT ,¤Ã¤Ãvi¤Ãp ¤Ã¤ÃvyH ,ttoG ŸÃ¼ÃrG ,!aloH¡Â :eporuE
+ƒá‘ƒáƒá¯ƒá ƒáƒá›ƒáƒá’ƒá ,‚Ï±ÎƒÏ ¬Î¹ÎµÎ“Î ,!µÐ‚Ñ¹ÐƒÑ²Ð‚ÑÑ²Ð°Ð€Ñ´Ð—Ð ,ned ½ÃrboD ,!‡Ä›ÅezC
+ˆá‹ˆá ˆá :acirfA
+…ÙƒÙŠÙ„Ù¹Ø …Ù§Ø„Ù‘Ù³Ø„Ù§Ø ,×•×œ×©× :tsaE raeN/elddiM
+,‡­à¬¬à¿¬à£¬à­à¶¬à ,‚´à°´à¾´à•´àµà¸´à®´à¨´à ,°²à¾²à•²à³à¸²à®²à¨²à ,‡¥à¤¤à¥à¸¤à®¤à¨¤à ,‡«à¤ªà«à¸ªà®ªà¨ªà :aisA htuoS
+Ž¼à¦½à‚½àº½à£½à‹¼àº½à‘½à–½à‹¼à¦½à²½à¤½à‹¼à²¾à€½à–½à ,‚°à°°à¾°à•°à±à¸°à®°à¨°à ,¯à®®à•®à¯à•®à£®àµ®à ,Š·à±¶à€·à·à¶¶à”·àº¶à†¶à
+n¡ºáb o ÃhC ,š¸à±¸à£¸à„¸àµ¸à”¸àª¸à±¸à§¸àª¸à ,«€á•€á¬€áœ€á‚€á¹€áº€á„€á™€á ,µºà”ºàºà²ºàšºà°ºàªºà ,šžá½žáŸžá”žá¶žášžá†Ÿá‡žá :aisA tsaE htuoS
+”šì¸„ì˜•í•…ëˆ•ì ,¯ã¡ã«ã“‚ã“ã ,¨™æ©—æ ,½¥å ½ä :aisA tsaE
+¡–â  p olleh ¢€â dlrow ˆˆâ p €ˆâ ,• â‡ â‡ â‘ â“ â ,ed­ÅaµÄui‰Ä oÄnaÅo¥ÄE :csiM
+)¼™ç‹–é,£°æƒ…å(CSK ,)º™ç‹–é,—°æƒ…å(SIJ ,)¼™ç‹–é,£°æƒ…å(5GIB ,)‘å€¼å,”°æƒ…å(BG :yteirav KJC
+!µÐ‚Ñ¹ÐƒÑ²Ð‚ÑÑ²Ð°Ð€Ñ´Ð—Ð ,×•×œ×©× ,‚Ï±ÎƒÏ ¬Î¹ÎµÎ“Î ,ed­ÅaµÄui‰Ä oÄnaÅo¥ÄE :tesrahc edocinU
 
 OLLEH          )EMAN EVITAN( EGAUGNAL
 -----          ----------------------

@@ -242,7 +242,7 @@ typedef struct {
 option_t options_booleennes[]={ {0,{"non","no","n",0}},
                                 {1,{"oui","yes","o","y",0}},
                                 {0,{0}}};
-                    
+
 
 int demander(const char* prompt,const option_t options[]){
     while(1){
@@ -424,7 +424,7 @@ void plus_ou_moins_jouer(plus_ou_moins_t* jeu){
 
 typedef struct {
     int min;
-    int max;    
+    int max;
     int secret;
 } auto_maitre_data_t;
 
@@ -548,7 +548,7 @@ maitre_plus_ou_moins_t* nouveau_cli_maitre(){
 
 
 ////////////////////////////////////////////////////////////////////////
-//    
+//
 // Ici on représente un joueur humain utilisant un interface
 // utilisateur CLI:
 //
@@ -620,7 +620,7 @@ joueur_plus_ou_moins_t* nouveau_cli_joueur(){
 
 typedef struct {
     int min;
-    int max;    
+    int max;
 } auto_joueur_data_t;
 
 void auto_joueur_debut(joueur_plus_ou_moins_t* joueur,int min,int max){
@@ -698,17 +698,17 @@ void test_plus_ou_moins(int min,int max){
 
 
 ////////////////////////////////////////////////////////////////////////
-// 
+//
 // Lorsque l'utilisateur a trouvé le nombre mystère, le programme
 // s'arrête. Pourquoi ne pas demander s'il veut faire une autre partie ?
-// 
+//
 // Si vous faites ça, il vous faudra faire une boucle qui englobera la
 // quasi-totalité de votre programme. Cette boucle devra se répéter TANT
 // QUE l'utilisateur n'a pas demandé à arrêter le programme. Je vous
 // conseille de rajouter une variable booléenne continuerPartie
 // initialisée à 1 au départ. Si l'utilisateur demande à arrêter le
 // programme, vous mettrez la variable à 0 et le programme s'arrêtera.
-// 
+//
 ////////////////////////////////////////////////////////////////////////
 
 typedef maitre_plus_ou_moins_t* (*nouveau_maitre_pr)();

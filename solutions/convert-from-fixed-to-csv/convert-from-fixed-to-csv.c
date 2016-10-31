@@ -5,9 +5,9 @@
 //SYSTEM:             POSIX
 //USER-INTERFACE:     NONE
 //DESCRIPTION
-//    
+//
 //    Converti un fichier d'enregistremet fixe vers le format CSV.
-//    
+//
 //AUTHORS
 //    <PJB> Pascal J. Bourguignon <pjb@informatimago.com>
 //MODIFICATIONS
@@ -15,19 +15,19 @@
 //BUGS
 //LEGAL
 //    AGPL3
-//    
+//
 //    Copyright Pascal J. Bourguignon 2016 - 2016
-//    
+//
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU Affero General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
-//    
+//
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU Affero General Public License for more details.
-//    
+//
 //    You should have received a copy of the GNU Affero General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //****************************************************************************
@@ -113,7 +113,7 @@ int strcnt(const char string[],char character){
 
 On va représenter dans des structures de données, la description des
 champs et des enregistrement, ainsi que les valeurs de champs d'un
-enregistrement.  
+enregistrement.
 
 Comme on identifie seulement trois type de champs: entier, nombre à
 virguel fixe (entier avec un virgule virtuelle) et chaîne, ça
@@ -137,17 +137,17 @@ typedef struct {
 
 // description of the input records
 field_description_t vendeur[]={
-            {"magasin", pic_entier, 3,  0}, 
-            {"novend",  pic_entier, 4,  0}, 
-            {"nom",     pic_string, 20, 0}, 
+            {"magasin", pic_entier, 3,  0},
+            {"novend",  pic_entier, 4,  0},
+            {"nom",     pic_string, 20, 0},
             {"prenom",  pic_string, 15, 0},
-            {"mont1",   pic_fixed,  6,  2}, 
-            {"mont2",   pic_fixed,  6,  2}, 
-            {"mont3",   pic_fixed,  6,  2}, 
-            {"prim1",   pic_fixed,  5,  2}, 
-            {"prim2",   pic_fixed,  5,  2}, 
-            {"prim3",   pic_fixed,  5,  2}, 
-            {"filler",  pic_string, 6,  0}, 
+            {"mont1",   pic_fixed,  6,  2},
+            {"mont2",   pic_fixed,  6,  2},
+            {"mont3",   pic_fixed,  6,  2},
+            {"prim1",   pic_fixed,  5,  2},
+            {"prim2",   pic_fixed,  5,  2},
+            {"prim3",   pic_fixed,  5,  2},
+            {"filler",  pic_string, 6,  0},
         };
 
 #define countof(vector) (sizeof((vector))/sizeof((vector)[0]))
@@ -211,7 +211,7 @@ void parse_field(field_description_t* field,field_value_t* value,
           error(EX_SOFTWARE,"Unexpected field picture (field name: %s, picture: %d)",
                 field->name,field->picture);
     }
-        
+
 }
 
 void parse_record(int nfields,field_description_t fields[],field_value_t values[],
@@ -234,7 +234,7 @@ char* generate_csv_field_for_value(field_value_t* value){
           char* buffer=check_not_null(malloc(ENTIER_MAX_FIELD_SIZE),EX_OSERR,"Out of Memory");
           sprintf(buffer,"%lu",value->info.entier.value);
           return buffer;
-      }          
+      }
       case pic_fixed:{
           assert(value->info.fixed.virtual_comma<value->width);
           assert(0<value->info.fixed.virtual_comma);

@@ -3,17 +3,17 @@ etartsnomed ot tub ,evisneherpmoc eb ot dednetni ton si tI
 .stroppus scamE taht stes retcarahc eht fo emos
 
 :selpmaxe IICSA-noN
-uġnoB ,tsuthõ ereT ,ääviäp äävyH ,ttoG ßürG ,!aloH¡ :eporuE  
-აბოჯრამაგ ,ςασ άιεΓ ,!етйувтсвардЗ ,ned ýrboD ,!ćśezC          
-ምላሠ :acirfA  
-مكيلع مالّسلا ,םולש :tsaE raeN/elddiM  
-,େବିଣୁଶ ,ംരാക്സമന ,ರಾಕ್ಸಮನ ,ेत्समन ,ેત્સમન :aisA htuoS  
-༎སགེལ་ེདབ་སིཤ་ྲཀབ ,ంరాక్సమన ,்மக்கணவ ,්නවෝබුයආ              
-nạb oàhC ,บัรคีดสัวส ,ါပာလဂ္်ငမ ,ີດຍາບະສ ,រួសបារំជ :aisA tsaE htuoS  
-요세하녕안 ,はちにんこ ,晨早 ,好你 :aisA tsaE  
-□  p olleh • dlrow ∈ p ∀ ,⠕⠇⠇⠑⠓ ,edŭaĵuiĉ oĝnaŝoĥE :csiM  
-)發開,氣元(CSK ,)発開,気元(SIJ ,)發開,氣元(5GIB ,)发开,气元(BG :yteirav KJC  
-!етйувтсвардЗ ,םולש ,ςασ άιεΓ ,edŭaĵuiĉ oĝnaŝoĥE :tesrahc edocinU  
+uġnoB ,tsuthõ ereT ,ääviäp äävyH ,ttoG ßürG ,!aloH¡ :eporuE
+აბოჯრამაგ ,ςασ άιεΓ ,!етйувтсвардЗ ,ned ýrboD ,!ćśezC
+ምላሠ :acirfA
+مكيلع مالّسلا ,םולש :tsaE raeN/elddiM
+,େବିଣୁଶ ,ംരാക്സമന ,ರಾಕ್ಸಮನ ,ेत्समन ,ેત્સમન :aisA htuoS
+༎སགེལ་ེདབ་སིཤ་ྲཀབ ,ంరాక్సమన ,்மக்கணவ ,්නවෝබුයආ
+nạb oàhC ,บัรคีดสัวส ,ါပာလဂ္်ငမ ,ີດຍາບະສ ,រួសបារំជ :aisA tsaE htuoS
+요세하녕안 ,はちにんこ ,晨早 ,好你 :aisA tsaE
+□  p olleh • dlrow ∈ p ∀ ,⠕⠇⠇⠑⠓ ,edŭaĵuiĉ oĝnaŝoĥE :csiM
+)發開,氣元(CSK ,)発開,気元(SIJ ,)發開,氣元(5GIB ,)发开,气元(BG :yteirav KJC
+!етйувтсвардЗ ,םולש ,ςασ άιεΓ ,edŭaĵuiĉ oĝnaŝoĥE :tesrahc edocinU
 
 OLLEH          )EMAN EVITAN( EGAUGNAL
 -----          ----------------------

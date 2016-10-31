@@ -4,11 +4,11 @@
 
 
 
-============================================================== 
-|                                                            | 
-|       SNOITISOPORP SED LUCLAC EL RUOP GNAW ED EMHTIROGLA'L | 
-|                                                            | 
-============================================================== 
+==============================================================
+|                                                            |
+|       SNOITISOPORP SED LUCLAC EL RUOP GNAW ED EMHTIROGLA'L |
+|                                                            |
+==============================================================
 
 
 : euqirotsih etoN
@@ -46,10 +46,10 @@ li te ,)0691 sraM ed etad tse leunam el ,tnemetsuj 407 MBI rus ,1 PSIL( PSIL
 .I/LP ed exatnys al ed tnaripsni suon ne ,)elleirétam noitacilpmi te noitagén
 : etnassiorcéd étiroirp ed erdro raP
 
-, noitagén al ruop "~"  
-,)UO( noitcnojsid al ruop "|"  
-,)TE( noitcnojnoc al ruop "&"  
-.noitacilpmi'l ruop ">"  
+, noitagén al ruop "~"
+,)UO( noitcnojsid al ruop "|"
+,)TE( noitcnojnoc al ruop "&"
+.noitacilpmi'l ruop ">"
 
 )b PMI ))a NON( TE )b UO a((( = b > a~ & )b | a( : elpmexE
 
@@ -67,14 +67,14 @@ enu tse snoitisoporp sed luclac ud eénnod elumrof enu'uq rertnoméd ruoP
 sed rus siam ,seélosi snoitisoporp sed rus sap non elliavart no ,eigolotuat
 emrof al ed ,SECNEUQÉS
 
-" nq,...,2q ,1q >- mp,...,2p ,1p "   
+" nq,...,2q ,1q >- mp,...,2p ,1p "
 
 ed TNEDECÉTNA'l emrof ip sed elbmesne'L  .snoitisoporp sed tnos jq ,ip sel ùo
 .TNEUQÉSNOC nos elleppa's jq sed iulec ,ecneuqés al
 
 : 2=n te 1=m ceva ,elpmexe raP
 
-)c > a( , )b~ & a( >- ))c > b( | a~( 
+)c > a( , )b~ & a( >- ))c > b( | a~(
 
 .})c > a( , )b~ & a({ = tneuqésnoc }))c > b( | a~({ = tnedécétna
 
@@ -90,11 +90,11 @@ noitisoporp emêm enu ,tnemelagÉ  .noitacifingis snas tse jq sed te ip sed
 
 NOITACILPMI enu emmoc eterpretni's ecneuqés enU
 
-.")nq UO...UO 2q UO 1q( >= )mp TE...TE 2p TE 1p("  
+.")nq UO...UO 2q UO 1q( >= )mp TE...TE 2p TE 1p("
 
 : elpmexe erton snaD
 
-)c > a( | )b~ & a( > ))c > b( | a~(  
+)c > a( | )b~ & a( > ))c > b( | a~(
 
 euqleuq eiarv tse noitseuq ne noitacilpmi'l is EDILAV tse ecneuqés ellet enU
 ne noitacilpmi'l is erid-a-tse'c ,selbairav sed sruelav ed emètsys el tios
@@ -176,12 +176,12 @@ ed stnemelé sel imrap noitagén enu tiarappa ùo ecneuqés enu S tioS
 snovuop suon ,tneréffidni tse stnemelé sed erdro'l emmoc : tnedécétna'l
 : srola tircé's S ecneuqés aL .p~ = 1p resop te ,tnemelé tec 1p releppa
 
-nq,...,2q ,1q >- mp,...,2p ,p~ = S  
+nq,...,2q ,1q >- mp,...,2p ,p~ = S
 
 ne eunetbo 'S ecneuqés al à etnelaviuqé tse S ecneuqés aL : NOITAVRESBO
 : "tneuqésnoc el snad p ressap tnasiaf"
 
-nq,...,2q ,1q ,p >- mp,...,2p = 'S   
+nq,...,2q ,1q ,p >- mp,...,2p = 'S
 
 tse 'S is tnemelues te is edilav tse S euq snodnetne suon ,"etnelaviuqé" raP
 .edilav
@@ -213,17 +213,17 @@ elle'uq tnemmedivé tse têrétni noS  .eilbaté isnia tse noitavresbo ertoN
 
 -----------------------------------------------------------------------------
 
-)tnedécétna'l snad noitagéN( : tnA-géN elgèR 
+)tnedécétna'l snad noitagéN( : tnA-géN elgèR
 
-ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP  
+ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP
 
-" nq,...,2q ,1q >- mp,...,2p ,p~ "  
+" nq,...,2q ,1q >- mp,...,2p ,p~ "
 
-ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI  
+ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
-"nq,...,2q ,1q ,p >- mp,...,2p"   
+"nq,...,2q ,1q ,p >- mp,...,2p"
 
-.TNEMEUQORPICÉR TE  
+.TNEMEUQORPICÉR TE
 
 ------------------------------------------------------------------------------
 
@@ -238,17 +238,17 @@ ne eunetbo ecneuqés al à etnelaviuqé tse tneuqésnoc el snad tiarappa noitagén
 
 ------------------------------------------------------------------------------
 
-)tneuqésnoc el snad noitagéN( : snoC-géN elgèR 
+)tneuqésnoc el snad noitagéN( : snoC-géN elgèR
 
-ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP  
+ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP
 
-"nq,...,2q ,q~ >- mp,...,2p ,1p"  
+"nq,...,2q ,q~ >- mp,...,2p ,1p"
 
-ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI  
+ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
-"nq,...,2q >- mp,...,2p ,1p ,q"  
+"nq,...,2q >- mp,...,2p ,1p ,q"
 
-.TNEMEUQORPICÉR TE  
+.TNEMEUQORPICÉR TE
 
 ----------------------------------------------------------------------------
 
@@ -269,27 +269,27 @@ enu uo S ecneuqés enu'uq ertnom ,noitcnojsid al ed étivitaicossa'l à etnioj
 ed 'S ecneuqés al à etnelaviuqé tse tneuqésnoc el snad tîarappa noitcnojsid
 : "sesèhtnerap sel tnamirppus" ne eunetbo ,sniom ed nu étixelpmoc
 
-nq , ... ,2q ,)"q | 'q( >- mp , ... ,1p = S  
+nq , ... ,2q ,)"q | 'q( >- mp , ... ,1p = S
 à tuaviuqé
-nq , ... ,2q ,"q ,'q >- mp , ... ,1p = 'S  
+nq , ... ,2q ,"q ,'q >- mp , ... ,1p = 'S
 
 
 : tnedécétna'l snad tîarappa noitcnojnoc enu uo ecneuqés enu ruop emêm eD
 
-nq , ... ,2q ,1q >- mp , ... 2p ,)"p & 'p( = S  
+nq , ... ,2q ,1q >- mp , ... 2p ,)"p & 'p( = S
 à tuaviuqé
-nq , ... ,2q ,1q >- mp , ... ,2p ,"p ,'p = 'S  
+nq , ... ,2q ,1q >- mp , ... ,2p ,"p ,'p = 'S
 
 
 tneuqilpmoc es sesohc sel ,tnedécétna'l snad tîarappa noitcnojsid enu'uqsroL
 epyt ec ed ecneuqés enU  .uep nu
 
-nq , ... ,2q ,1q >- mp , ... 2p ,)"p | 'p( = S  
+nq , ... ,2q ,1q >- mp , ... 2p ,)"p | 'p( = S
 
 : tnos el setnavius secneuqés XUED sel is tnemelues te is edilav tse
 
-nq , ... ,2q ,1q >- mp , ... ,2p ,'p = 'S  
-nq , ... ,2q ,1q >- mp , ... ,2p ,"p = "S  
+nq , ... ,2q ,1q >- mp , ... ,2p ,'p = 'S
+nq , ... ,2q ,1q >- mp , ... ,2p ,"p = "S
 
 sed ertua'l uo enu'l is eiarv tse )"p | 'p( noitcnojsid al ,teffe nE
 enîartne S ed étidilav al ,enu'l tse'c is : eiarv tse "p te 'p snoitisoporp
@@ -300,13 +300,13 @@ nu sulp ua étixelpmoc enu enucahc tno "S te 'S secneuqés xued sel euq areton
 al : tneuqésnoc el snad tîarappa noitcnojnoc enu uo ecneuqés enu ruop emêm eD
 ecneuqés
 
-nq , ... ,2q ,)"q & 'q( >- mp , ... ,1p = S  
+nq , ... ,2q ,)"q & 'q( >- mp , ... ,1p = S
 
 ,erueiréfni étixelpmoc ed ,setnavius XUED sel is tnemelues te is edilav tse
 tnos el
 
-nq , ... ,2q ,'q >- mp , ... ,1p = 'S  
-nq , ... ,2q ,"q >- mp , ... ,1p = "S  
+nq , ... ,2q ,'q >- mp , ... ,1p = 'S
+nq , ... ,2q ,"q >- mp , ... ,1p = "S
 
 .etaidémmi noitacifiréV
 
@@ -319,19 +319,19 @@ selgèr sed emmoc snoitavresbo sec snolumrofer suon ,noitagén al ruop emmoC
 
 )tnedécétna'l snad noitcnojsiD( : tnA-jsiD elgèR
 
-ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP 
+ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP
 
-" nq,...,2q ,1q >- mp,...,2p ,)"p | 'p( "  
+" nq,...,2q ,1q >- mp,...,2p ,)"p | 'p( "
 
-ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI 
+ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
-" nq,...,2q ,1q >- mp,...,2p ,'p "  
+" nq,...,2q ,1q >- mp,...,2p ,'p "
 
-ECNEUQÉS AL ED ELLEC TE 
+ECNEUQÉS AL ED ELLEC TE
 
-" nq,...,2q ,1q >- mp,...,2p ,"p "  
+" nq,...,2q ,1q >- mp,...,2p ,"p "
 
-.TNEMEUQORPICÉR TE 
+.TNEMEUQORPICÉR TE
 
 -----------------------------------------------------------------------------
 
@@ -339,15 +339,15 @@ ECNEUQÉS AL ED ELLEC TE
 
 )tneuqésnoc el snad noitcnojsiD( : snoC-jsiD elgèR
 
-ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP 
+ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP
 
-" nq,...,2q ,)"q | 'q( >- mp,...,2p ,1p "  
+" nq,...,2q ,)"q | 'q( >- mp,...,2p ,1p "
 
-ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI 
+ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
-" nq,...,2q ,"q ,'q >- mp,...,2p ,1p "  
+" nq,...,2q ,"q ,'q >- mp,...,2p ,1p "
 
-.TNEMEUQORPICÉR TE 
+.TNEMEUQORPICÉR TE
 
 -----------------------------------------------------------------------------
 
@@ -360,15 +360,15 @@ ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
 )tnedécétna'l snad noitcnojnoC( : tnA-jnoC elgèR
 
-ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP 
+ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP
 
-" nq,...,2q ,1q >- mp,...,2p ,)"p & 'p( "  
+" nq,...,2q ,1q >- mp,...,2p ,)"p & 'p( "
 
-ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI 
+ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
-" nq,...,2q ,1q >- mp,...,2p ,"p ,'p "  
+" nq,...,2q ,1q >- mp,...,2p ,"p ,'p "
 
-.TNEMEUQORPICÉR TE 
+.TNEMEUQORPICÉR TE
 
 -----------------------------------------------------------------------------
 
@@ -376,19 +376,19 @@ ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
 )tneuqésnoc el snad noitcnojnoC( : snoC-jnoC elgèR
 
-ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP 
+ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP
 
-" nq,...,2q ,)"q & 'q( >- mp,...,2p ,1p "  
+" nq,...,2q ,)"q & 'q( >- mp,...,2p ,1p "
 
-ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI 
+ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
-" nq,...,2q ,'q >- mp,...,2p ,1p "  
+" nq,...,2q ,'q >- mp,...,2p ,1p "
 
-ECNEUQÉS AL ED ELLEC TE 
+ECNEUQÉS AL ED ELLEC TE
 
-" nq,...,2q ,"q >- mp,...,2p ,1p "  
+" nq,...,2q ,"q >- mp,...,2p ,1p "
 
-.TNEMEUQORPICÉR TE 
+.TNEMEUQORPICÉR TE
 
 -----------------------------------------------------------------------------
 
@@ -400,25 +400,25 @@ enu etnesérp iuq ecneuqés enu ,"Y | X~ >==< Y > X" a no noitiniféd rap emmoC
 elgèr al tnauqilppa iul ne retiart es tuep tnedécétna'l snad noitacilpmi
 tircéer no : tnA-jsiD
 
-nq,...,2q ,1q >- mp,...,2p ,)"p > 'p( = S  
-emmoc 
+nq,...,2q ,1q >- mp,...,2p ,)"p > 'p( = S
+emmoc
 
-nq,...,2q ,1q >- mp,...,2p ,)"p | 'p~( = S  
+nq,...,2q ,1q >- mp,...,2p ,)"p | 'p~( = S
 
 secneuqés xued sel ennod iuq
 
-nq,...,2q ,1q >- mp,...,2p ,'p~ = 'S  
-nq,...,2q ,1q >- mp,...,2p ,"p = "S  
+nq,...,2q ,1q >- mp,...,2p ,'p~ = 'S
+nq,...,2q ,1q >- mp,...,2p ,"p = "S
 
 tneitbo no 'S a tnA-geN elgèr al tnauqilppa ne siup
 
-nq,...,2q ,1q ,'p >- mp,...,2p = ''S  
+nq,...,2q ,1q ,'p >- mp,...,2p = ''S
 
 tnemetcirts étixelpmoc ed secneuqés xued ed elpuoc nu tnemelanif uo'd
 : S ed ellec a erueirefni
 
-nq,...,2q ,1q ,'p >- mp,...,2p = ''S  
-nq,...,2q ,1q >- mp,...,2p ,"p = "S  
+nq,...,2q ,1q ,'p >- mp,...,2p = ''S
+nq,...,2q ,1q >- mp,...,2p ,"p = "S
 
 : eévired elgèr al cnod snolumrof suoN
 
@@ -426,19 +426,19 @@ nq,...,2q ,1q >- mp,...,2p ,"p = "S
 
 )tnedécétna'l snad noitacilpmI( : tnA-pmI elgèR
 
-ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP 
+ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP
 
-" nq,...,2q ,1q >- mp,...,2p ,)"p > 'p( "  
+" nq,...,2q ,1q >- mp,...,2p ,)"p > 'p( "
 
-ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI 
+ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
-" nq,...,2q ,1q ,'p >- mp,...,2p "  
+" nq,...,2q ,1q ,'p >- mp,...,2p "
 
-ECNEUQÉS AL ED ELLEC TE 
+ECNEUQÉS AL ED ELLEC TE
 
-" nq,...,2q ,1q >- mp,...,2p ,"p "  
+" nq,...,2q ,1q >- mp,...,2p ,"p "
 
-.TNEMEUQORPICÉR TE 
+.TNEMEUQORPICÉR TE
 
 -----------------------------------------------------------------------------
 
@@ -450,15 +450,15 @@ etiart es tneuqésnoc el snad noitacilpmi enu tnatnesérp ecneuqés enu ,emêm eD
 
 )tneuqésnoc el snad noitacilpmI( : snoC-pmI elgèR
 
-ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP 
+ECNEUQÉS AL ED ÉTIDILAV AL RERTNOMÉD RUOP
 
-" nq,...,2q ,)"q > 'q( >- mp,...,2p ,1p "  
+" nq,...,2q ,)"q > 'q( >- mp,...,2p ,1p "
 
-ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI 
+ECNEUQÉS AL ED ELLEC RILBATÉ'D TIFFUS LI
 
-" nq,...,2q ,"q >- mp,...,2p ,1p ,'q "  
+" nq,...,2q ,"q >- mp,...,2p ,1p ,'q "
 
-.TNEMEUQORPICÉR TE 
+.TNEMEUQORPICÉR TE
 
 -----------------------------------------------------------------------------
 
@@ -466,7 +466,7 @@ eriudart à ellerutan ecnadnet al eifitsuj snoC-pmI elgèr al euq arevresbo nO
 nu ceva ecneuqés enu'd emrof al suos tnemetcerid evitacilpmi noitisoporp enu
 eigolotuat al ,elpmexe rap : ediv-non tnedécétna
 
-))c > a( | b~ & a( > ))c > b( | a~(  
+))c > a( | b~ & a( > ))c > b( | a~(
 
 ediv tnedécétna ceva ecneuqés al rap "tnemelleiciffo" tiudart es
 
@@ -492,14 +492,14 @@ seétiart tnemevitceffe tnos selpmis seigolotuat ed erbmon niatrec nU
 : edohtém erton rap "tneménatnatsni"
 
 ennod snoC-pmI aiv iuq " )x > x( >- " ecneuqés al rap tiudart es : " x > x "
-.edilav tse iuq " x >- x " 
+.edilav tse iuq " x >- x "
 
 rap ," )x~ | x( >- " rap tiudart es : )ulcxe sreit ud iol( " x~ | x "
-.edilav " x >- x " snoC-geN rap te " x~ , x >- " tneitbo no snoC-jsiD 
+.edilav " x >- x " snoC-geN rap te " x~ , x >- " tneitbo no snoC-jsiD
 
 "))x > y( > x( >- " ed : )slennoitidart semoixa sed reimerp el( " )x > y( > x "
-,snoC-pmI rap uaevuon ed ,te " )x > y( >- x " snoC-pmI rap erit no 
-.edilav tse iuq " x >- y ,x " 
+,snoC-pmI rap uaevuon ed ,te " )x > y( >- x " snoC-pmI rap erit no
+.edilav tse iuq " x >- y ,x "
 
 tse iuq "z >- y ,x" luclac emêm el rap ennod " )z > y( > x " ,ehcnaver nE
 .XUAF z te sIARV y te x essuaf erdner al ruop erdnerp ,edilavni
@@ -543,7 +543,7 @@ edilav tse iuq   c ,b >- b ,a  = 8'S
 
 elaitini elumrof al euq cnod ,0S ed cnod ,2S ed étidilav al ed evuerp aL
 
-))c > a( | b~ & a( > ))c > b( | a~(  
+))c > a( | b~ & a( > ))c > b( | a~(
 
 .eevehca isnia tse ,eigolotuat enu neib tse
 
@@ -623,75 +623,75 @@ suon tnavarapua'uq srola( sussed ua sessimérp sel te tiart ud suossed-ne
 .)>sessimérp< ED TIFFUS LI >noisulcnoc< RUOP" snoisid
 
 
-nq,...,2q ,1q ,p >- mp,...,2p   
+nq,...,2q ,1q ,p >- mp,...,2p
 -------------------------------  : tnA-géN
-nq,...,2q ,1q >- mp,...,2p ,p~  
+nq,...,2q ,1q >- mp,...,2p ,p~
 
 
-nq,...,2q >- mp,...,2p ,1p ,q   
+nq,...,2q >- mp,...,2p ,1p ,q
 -------------------------------- : snoC-géN
-nq,...,2q ,q~ >- mp,...,2p ,1p   
+nq,...,2q ,q~ >- mp,...,2p ,1p
 
 
-nq,...,2q ,1q >- mp,...,2p ,"p , nq,...,2q ,1q >- mp,...,2p ,'p  
+nq,...,2q ,1q >- mp,...,2p ,"p , nq,...,2q ,1q >- mp,...,2p ,'p
 ------------------------------------------------------------------ : tnA-jsiD
-nq,...,2q ,1q >- mp,...,2p ,)"p | 'p(   
+nq,...,2q ,1q >- mp,...,2p ,)"p | 'p(
 
 
-nq,...,2q ,"q ,'q >- mp,...,2p ,1p   
+nq,...,2q ,"q ,'q >- mp,...,2p ,1p
 -------------------------------------- : snoC-jsiD
-nq,...,2q ,)"q | 'q( >- mp,...,2p ,1p   
+nq,...,2q ,)"q | 'q( >- mp,...,2p ,1p
 
 
-nq,...,2q ,1q >- mp,...,2p ,"p ,'p   
+nq,...,2q ,1q >- mp,...,2p ,"p ,'p
 ------------------------------------- : tnA-jnoC
-nq,...,2q ,1q >- mp,...,2p ,)"p & 'p(   
+nq,...,2q ,1q >- mp,...,2p ,)"p & 'p(
 
 
-nq,...,2q ,"q >- mp,...,2p ,1p , nq,...,2q ,'q >- mp,...,2p ,1p  
+nq,...,2q ,"q >- mp,...,2p ,1p , nq,...,2q ,'q >- mp,...,2p ,1p
 ----------------------------------------------------------------- : snoC-jnoC
-nq,...,2q ,)"q & 'q( >- mp,...,2p ,1p   
+nq,...,2q ,)"q & 'q( >- mp,...,2p ,1p
 
 
-nq,...,2q ,1q >- mp,...,2p ,"p , nq,...,2q ,1q ,'p >- mp,...,2p  
+nq,...,2q ,1q >- mp,...,2p ,"p , nq,...,2q ,1q ,'p >- mp,...,2p
 ----------------------------------------------------------------- : tnA-pmI
-nq,...,2q ,1q >- mp,...,2p ,)"p > 'p(   
+nq,...,2q ,1q >- mp,...,2p ,)"p > 'p(
 
 
-nq,...,2q ,"q >- mp,...,2p ,1p ,'q   
+nq,...,2q ,"q >- mp,...,2p ,1p ,'q
 -------------------------------------- : snoC-pmI
-nq,...,2q ,)"q > 'q( >- mp,...,2p ,1p   
+nq,...,2q ,)"q > 'q( >- mp,...,2p ,1p
 
 
 
 evuerp ed serbra'd selpmexE )b
---------------------------- 
+---------------------------
 
 : ulcxe sreit ud ioL
-emoixA      
---------      
-x >- x      
------------ snoC-géN    
-x~ ,x >-      
------------- snoC-jsiD    
-)x~ | x( >-      
+emoixA
+--------
+x >- x
+----------- snoC-géN
+x~ ,x >-
+------------ snoC-jsiD
+)x~ | x( >-
 
 
 : 2S ed evuerp erèimerP
 
-emoixA  emoixA emoixA    
-----------  ---------- -------------    
-c >- c,b,a , c,b >- b,a c,a >- ,b,a    
------------------------- A-I -----------    
-c >- )c>b(,b,a , c >- a~,b,a    
----------------------------------------- A-D   
-c >- ))c>b(|a~(,b,a   emoixA  
------------------------ snoC-geN -------------------  
-c,b~ >- ))c>b(|a~(,a , c,a >- ))c>b(|a~(,a  
--------------------------------------------------------- snoC-jnoC 
-c,)b~&a( >- ))c>b(|a~(,a   
------------------------------ snoC-pmI  
-)c>a(,)b~&a( >- ))c>b(|a~(   
+emoixA  emoixA emoixA
+----------  ---------- -------------
+c >- c,b,a , c,b >- b,a c,a >- ,b,a
+------------------------ A-I -----------
+c >- )c>b(,b,a , c >- a~,b,a
+---------------------------------------- A-D
+c >- ))c>b(|a~(,b,a   emoixA
+----------------------- snoC-geN -------------------
+c,b~ >- ))c>b(|a~(,a , c,a >- ))c>b(|a~(,a
+-------------------------------------------------------- snoC-jnoC
+c,)b~&a( >- ))c>b(|a~(,a
+----------------------------- snoC-pmI
+)c>a(,)b~&a( >- ))c>b(|a~(
 
 
 

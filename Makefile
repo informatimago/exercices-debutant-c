@@ -26,7 +26,7 @@ PROGRAMS = \
 	notes/arithmetic \
 	notes/scanf-vs-atoi \
 	notes/funbool \
-	travaux-pratiques/plus-ou-moins 
+	travaux-pratiques/plus-ou-moins
 
 
 compile:

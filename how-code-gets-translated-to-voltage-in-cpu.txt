@@ -8,7 +8,7 @@ software process, that translates from one code form to another code
 form, keeping the meaning identical.
 
 But there is no such processing that would take code as input, and
-produce voltages inside a CPU.  
+produce voltages inside a CPU.
 
 This is a category error.
 
@@ -65,7 +65,7 @@ disconnection between a word line and the output lines.  This is a
 material configuration, not something that's configured
 electronically.  This is something that a human being can configure
 manually, by cutting or soldering wires.  Or possibly, by switching
-interruptors.  
+interruptors.
 
 
 However, and this is the important thing here: that remains something
@@ -85,7 +85,7 @@ them at this electonic level would lose anybody in too many details.
 
 On the other hand, there are a lot of repeated patterns all over the
 place.  Flip-flops, memory cells, gates, registers, multiplexers,
-demultiplexers, buses, etc. 
+demultiplexers, buses, etc.
 
 So we could give a description of the hardwarea machine in those
 abstract terms.  We can explain the ROM as I did already above, in
@@ -98,7 +98,7 @@ And instead of talking of voltage levels on the lines of the address
 or data bus, we can add a further level of abstraction, by numbering
 those lines from 0 to A-1 for the address bus, and from 0 to D-1 for
 the data bus.  We can introduce the abstraction of saying that one
-voltage level is 1, and the other is 0.  
+voltage level is 1, and the other is 0.
 
 And to describe concisely a configuration of a bus, we can compute the
 numbers:
@@ -152,7 +152,7 @@ and registers, or of voltage levels and electrical circuits.  If
 only because our short term memory is limited to about 7 elements.
 ADD r1,r2  is 3 elements:  addition, register 1, and register 2.  So
 we're left with 4 free brain cells to think about the rest of the code
-:-)  
+:-)
 
 But if we had to think about the voltage levels and electrical
 circuits, we'd be overwhelmed.
@@ -187,7 +187,7 @@ code.
 
 When you type a key on the keyboard, there's a little electrical
 configuration change that deterministically determine the evolution of
-the electrical circuits in the keyboard, and in the computer. 
+the electrical circuits in the keyboard, and in the computer.
 
 So, as a human being, you may be thinking you're typing the letter
 "A", but what you're really doing, is to move down some key on the
@@ -231,9 +231,9 @@ in a given code (ASCII or UTF-8 nowadays, EBCDIC or some other code in
 the old days), and by processing those numbers it would output the
 number 208 (and perhaps a few others).  Then another program would be
 able to "load" those numbers in memory and to "jump" to them to make
-them executed by the processor.  
+them executed by the processor.
 
-Err, no way!  
+Err, no way!
 
 Actually it's voltage configurations making the processors change
 voltage configurations in such a way that the new voltage

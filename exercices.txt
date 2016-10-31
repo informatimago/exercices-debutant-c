@@ -76,7 +76,7 @@ man 3 qsort
 Le but de ce programme sera de convertir un fichier contenant des
 enregistrements de taille fixe, en un fichier au format "CSV",
 Comma-Separated-Value, valeurs séparées par des virgules, qui est plus
-commun avec les programmes plus récents.  
+commun avec les programmes plus récents.
 
 *** Format du fichier d'entrée
 
@@ -142,7 +142,7 @@ que l'on ignore entièrement.
 
 
 Pour effectuer une somme de nombres tels que:
-    PIC 999V99  +  PIC 99V999 
+    PIC 999V99  +  PIC 99V999
 
 on peut écrire en C:
 
@@ -165,8 +165,8 @@ Lorsque le champ ne contient que des lettres, chiffre, point décimale,
 ou signe, sans espace et sans autre caractère spécial, alors on peut
 l'écrire sans les double-quotes.  (La présence des double-quotes
 n'implique pas que le type du champ soit chaîne plutôt que numérique).
-Si un champ doit contenir une double-quote celle-ci doit être doublée: 
-Un champ contenant: « Son nom est "nom". » s'écrira en CSV: 
+Si un champ doit contenir une double-quote celle-ci doit être doublée:
+Un champ contenant: « Son nom est "nom". » s'écrira en CSV:
 "Son nom est ""nom""."
 
 Le format CSV a de nombreuses variantes et beaucoup plus de détails et
@@ -284,7 +284,7 @@ Note: attention à l'encodage des lettres accentuées: il faut tenir
 compte du locale (variables d'environnement LC_MESSAGES, LC_CTYPE,
 LC_ALL), pour les données suivantes:
 
-- arguments (passés par argv); ils sont tapés sur un terminal lequel 
+- arguments (passés par argv); ils sont tapés sur un terminal lequel
   les encode selon ses capacités et sa configuration.  Le shell les
   transmet tels-quels, et c'est au programme de les interpréter en
   fonction du locale (LC_CTYPE ou par défaut LC_ALL).
@@ -313,13 +313,13 @@ Cet exercice serait plus facile pour les anglais...
 
 *** Exemples
 
-% conjuguer finir 'Passé composé' 
-Passé composé 
-    j'ai fini 
-    tu as fini 
-    il a fini 
-    nous avons fini 
-    vous avez fini 
+% conjuguer finir 'Passé composé'
+Passé composé
+    j'ai fini
+    tu as fini
+    il a fini
+    nous avons fini
+    vous avez fini
     ils ont fini
 
 % conjuguer manger
@@ -508,12 +508,12 @@ https://programmingpraxis.com/2016/10/11/three-list-manipulation-exercises/
 
 Implanter trois fonctions pour manipuler des listes d'entier:
 
-- une fonction qui prend une liste d'entier, et retourne un nouvelle liste 
+- une fonction qui prend une liste d'entier, et retourne un nouvelle liste
   d'entier avec tous les entier impair enlevés.
 
 - une fonction qui enlève d'une liste chaînée tous les n-ième éléments.
 
-- une fonction qui échange les deux moitiés d'une liste; si le nombre 
+- une fonction qui échange les deux moitiés d'une liste; si le nombre
   d'éléments est impair, celui du millieu doit aller avec la seconde
   moitié de la liste.
 

@@ -5,9 +5,9 @@
 //SYSTEM:             POSIX
 //USER-INTERFACE:     NONE
 //DESCRIPTION
-//    
+//
 //    Filtre inversant l'ordre des lignes.
-//    
+//
 //AUTHORS
 //    <PJB> Pascal J. Bourguignon <pjb@informatimago.com>
 //MODIFICATIONS
@@ -15,19 +15,19 @@
 //BUGS
 //LEGAL
 //    AGPL3
-//    
+//
 //    Copyright Pascal J. Bourguignon 2016 - 2016
-//    
+//
 //    This program is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU Affero General Public License as published by
 //    the Free Software Foundation, either version 3 of the License, or
 //    (at your option) any later version.
-//    
+//
 //    This program is distributed in the hope that it will be useful,
 //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU Affero General Public License for more details.
-//    
+//
 //    You should have received a copy of the GNU Affero General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //****************************************************************************
@@ -129,7 +129,7 @@ status_t read_one_line(FILE* input,long long lino){
 
 status_t fill_big_buffer(FILE* input,long long* lino){
     // Fill the big buffer with lines read from input.
-    big_buffer_length=0;   
+    big_buffer_length=0;
     status_t status=read_one_line(input,++(*lino));
     while(status==status_read_line){
         status=read_one_line(input,++(*lino));
@@ -247,7 +247,7 @@ void reverse_big_file(FILE* input,FILE* output,long long lino){
         }
         save_big_buffer(buffer_count++,big_buffer,big_buffer_length);
         status=fill_big_buffer(input,&lino);
-    }    
+    }
     // 1- reverse the current big_buffer
     reverse_big_buffer(output);
     // 2- reverse the big_buffer stored in files, in reverse order:
