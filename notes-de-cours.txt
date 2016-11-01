@@ -1,6 +1,6 @@
+-*- mode:org;coding:utf-8 -*-
 
-Programmes en console -- Linux
-----------------------------------------
+* Programmes en console -- Linux
 
 https://openclassrooms.com/courses/apprenez-a-programmer-en-c/votre-premier-programme
 
@@ -38,12 +38,12 @@ reste quelques services qui sont encore intéressant à utiliser via
 telnet.  Par exemple connecte toi à l'ordinateur
 towel.blinkenlights.nl via telnet, et installe toi confortablement1
 
-
-Variables
-----------------------------------------
+* Première sequence
+** Variables
 
 https://openclassrooms.com/courses/apprenez-a-programmer-en-c/un-monde-de-variables
 
+*** sscanf et atoi
 
 Concernant sscanf et atoi, noter que ces fonctions interprètent
 différement le texte analysé: atoi considère un entier décimal, et
@@ -66,10 +66,34 @@ sscanf("0x123","%i",&value) -> 1, value =  291
 atoi("0xhello")                          ->    0
 sscanf("0xhello","%i",&value) -> 1, value =    0
 
+*** scanf
 
+Concernant scanf, essayer ce petit programme:
 
-Calculs
-----------------------------------------
+#+BEGIN_SRC(c)
+    #include <stdio.h>
+    int main(){
+        int n;
+        do{
+            printf("\nEncore un nombre: ");
+            fflush(stdout);
+            scanf("%20i",&n);
+        }while(n);
+        return 0;
+    }
+#+END_SRC
+
+Taper: 1 RET
+       2 RET
+       3 RET
+       hello RET
+
+Écrire un programme lisant similairement une séquence de nombre, un
+par ligne, mais sans entrer en boucle infinie si l'utilisateur tape
+autre chose qu'un nombre.  Ignorer toute entrée invalide, et
+continuer, jusqu'à ce que l'utilisateur entre 0.
+
+** Calculs
 
 https://openclassrooms.com/courses/apprenez-a-programmer-en-c/une-bete-de-calcul
 
@@ -132,16 +156,13 @@ peut avoir des définitions récursives (séries).  Celà ce traduira au
 final par des itérations (des boucles de programme), et des
 assignement répétés.
 
-
-
-
-Conditions
-----------------------------------------
+** Conditions
 
 https://openclassrooms.com/courses/apprenez-a-programmer-en-c/les-conditions-1
 
 - Utilisation de vecteurs en place d'alternatives.
 
+#+BEGIN_SRC(c)
     int f(int x){
         switch(x)
         case 0: return 1;
@@ -157,6 +178,7 @@ https://openclassrooms.com/courses/apprenez-a-programmer-en-c/les-conditions-1
        }else{
            static int table[]={1,33,42,55};
            return table[x]; }}
+#+END_SRC
 
 Normalement, les compilateurs modernes sont capable d'optimiser un
 switch en utilisant une table un des tests successifs automatiquement.
@@ -164,10 +186,8 @@ Mais il peut aussi être pratique (et parfois plus rapide à
 l'exécution) d'utiliser une table.  (Certains algorithmes utilisent
 explicitement de telles tables, par exemple l'analyse syntaxique LALR).
 
+** Boucles
 
-
-Boucles
-----------------------------------------
 https://openclassrooms.com/courses/apprenez-a-programmer-en-c/les-boucles-1
 
 
@@ -199,14 +219,17 @@ donnée:
   correspondant aux noeuds du graphe.  Par exemple, un arbre binaire
   peut avoir un noeud défini par:
 
+#+BEGIN_SRC(c)
        typedef struct noeud {
            const char* label;
            struct noeud* gauche;
            struct noeud* droite;
        } noeud_t;
+#+END_SRC
 
    il pourra être traité par une fonction telle que:
 
+#+BEGIN_SRC(c)
        void affiche_arbre(noeud_t* noeud){
             printf("%s\n",noeud->label);
             // un pointeur qui peut être null représente une alternative:
@@ -217,7 +240,198 @@ donnée:
                 affiche_arbre(noeud->droite);
             }
        }
-
-
+#+END_SRC
 
 TODO: invariants de boucle, pre-,post-conditions.
+* Seconde sequence
+** La programmation modulaire: les prototypes
+
+Bien qu'il soit possible de mettre ses fonctions dans n'importe quel
+ordre quand on écrit les prototypes, l'être humain qui lis le
+programme va avoir exactement le même problème que le compilateur pour
+comprendre le programme:  si on utilise des fonctions qui n'ont pas
+encore été définies, le code pourra être plus difficile à comprendre.
+Si on place les fonctions dans "n'importe quel" ordre, il sera plus
+difficile d'aller les chercher (il faudra utiliser la fonction de
+recherche dans l'éditeur, au lieu de lire le source séquentiellement).
+
+Donc bien que ce soit possible d'ordonner différement, je conseillerai
+en général, d'écrire les fonctions de bas-niveau, qui sont appelées,
+AVANT les fonctions de plus haut niveau, qui les appellent.  Ainsi la
+fonction main sera en dernière position dans son fichier source.
+
+
+Ceci dit, un programme bien structuré, utilisant de bonnes
+abstractions, devrait pouvoir se lire de haut en bas (c'est à dire, à
+partir de main, et ensuite en voyant les fonctions appelées, etc,
+jusqu'au plus bas niveaux).  Dans ce cas, on commence à lire le
+programme par la fin du fichier (où se trouve la fonction main), et on
+fait défiler vers le début du fichier, où se trouvent les fonctions de
+bas niveau.
+
+Prenons un exemple:
+
+#+BEGIN_SRC(c)
+    int main(const int argc,const char* argv[]){
+        initialiser();
+        configuration_t* configuration=configuration_nouveau();
+        process_arguments(configuration,argc,argv);
+        int max=10*expi(10,configuration->niveau);
+        if(configuration->plusieurs){
+            plusieurs_plus_ou_moins(1,max,
+                                    configuration->maitre_pr,
+                                    configuration->joueur_pr);
+        }else{
+            plus_ou_moins_jouer(nouveau_jeu_plus_ou_moins(1,max,
+                                                          configuration->maitre_pr(),
+                                                          configuration->joueur_pr()));
+        }
+        return 0;
+    }
+#+END_SRC
+
+en lisant cette fonction main(), on peut comprendre ce que font les
+fonctions appelées sans avoir à les lires.  S'il faut faire une
+modification ou corriger une bogue dans l'algorithme du joueur
+automatique, on peu comprendre sans lire tout le programme, qu'il ne
+faudra surement pas aller avoir dans process_arguments(), dans
+configuration_nouveau(), et même pas dans plusieurs_plus_ou_moins(),
+si la correction ou la bogue ne dépend pas de cette option.
+
+Les noms des fonctions jouent un rôle important pour aider dans cette
+compréhension empirique du code, ainsi que le choix des abstractions.
+
+
+Finalement, les prototypes vont être en fait importants pour les
+fichiers entêtes, et la compilation séparée.
+
+** Note sur la répartition des fonctions dans les fichiers.
+
+1- dans les anciens systèmes, l'espace mémoire centrale était trés
+   faible : il aurait été impossible de charger le source complet d'un
+   gros programme en mémoire, dans l'éditeur !  Dans les premières
+   versions d'unix, ils écrivaient le plus souvent une seule fonction
+   par fichier !
+
+2- de nos jours, les éditeurs sophistiqués et les IDE fournissent des
+   commandes de navigation permettant de sauter directement d'une
+   occurence d'un identificateur, à sa définition ou sa déclaration,
+   et même d'obtenir la liste des appelants d'une fonction, ou des
+   références d'une variable.  Ainsi, la navigation, que ce soit dans
+   le cas où l'on placerait tout le code dans un seul fichier, ou où
+   l'on placerait une fonction par fichier, se fera normalement aussi
+   facilement, et avec les mêmes commandes de haut niveau de l'IDE.
+
+   Et dans le cas où on utiliserait un éditeur rudimentaire, il serait
+   bien plus simple d'effectuer une recherche textuelle pour sauter
+   d'une occurence à l'autre d'un identificateur, que d'aller ouvrir
+   un autre fichier dans l'espoir d'y trouver la définition voulue !
+
+   Ceci arguerait plutôt en faveur de tout mettre dans un seul fichier !
+
+3- le principal intérêt qu'il reste à séparer le source en fichier, ou
+   en modules disctincts, et de permettre la compilation séparée de
+   ces fichiers, et ainsi, lorsqu'on effectue une modification, on n'a
+   qu'à recompiler le fichier modifier, et à effectuer l'édition de
+   lien, sans avoir à recompiler tout le programme.
+
+Cependant, on peut considérer que:
+
+a- de nos jour, la compilation d'un programme source C, même de taille
+   conséquente, est extrêmement rapide (en C++ c'est différent, mais
+   d'avoir des fichiers séparés n'aide pas en C++ à cause des
+   templates en particulier).
+
+b- quand on effectue une modification à un programme, elle va en
+   général concerner plusieurs modules de manière transversale.  Par
+   exemple, s'il faut ajouter la possibiliter d'enregistrer l'âge
+   d'une personne dans un programme gèrant une liste de personnes, il
+   va en général falloir changer:
+
+     - la structure de la base de donnée,
+     - le code du module définissant la structure de donnée pour la
+       personne (modèle),
+     - le code du module affichant une personne (interface
+       utilisateur),
+     - le code du module permettant de modifier les données d'une
+       personne (interface utilisateur, contrôleur).
+
+   Donc si on stoque classiquement les modules par fichier, avec tout
+   le code d'affichage dans un fichier, tout le code d'édition dans un
+   fichier, tout le code du modèle dans un fichier, et tout le code de
+   la base de donnée dans un fichier, de cette manière, alors on en
+   gagne rien puisqu'il faudra tout recompiler quand même !
+   (C'est particulièrement typique en programmation orientée objet).
+
+Au contraire, on devrait peut être stocker dans chaque fichier, une
+fonctionalité transversale:
+- tout ce qui concerne l'âge d'une personne,
+- tout ce qui concerne son emploi,
+- tout ce qui concerne ses informations de contact,
+- bref, tout ce qui concerne tel ou tel autre mécanisme.
+
+Mais souvent la syntaxe du langage ne permet pas de stoquer facilement
+les divers éléments relatifs à une seule entitée (ou objet, structure,
+classe), éparpillés dans différents fichiers.  Par exemple, en C, il
+n'est pas possible d'indiquer certains champs d'une structure dans un
+fichier, et d'autres champs dans un autre fichier.  Les définitions de
+types au moins devront être faites dans des fichiers (entêtes)
+uniques, et quand il faudra les modifier, il faudra recompiler tout
+les sources qui les incluens, c'est à dire en général tout le
+programme.
+
+Donc, garder tout le programme dans un seul fichier, de nos jours, ne
+serait pas une si bête idée. (Et même en considérant les DCVS
+(eg. git) et plusieurs développeurs travaillant sur le même fichier).
+
+Ceci dit, cela n'empêche pas de modulariser son programme: rassembler
+les types et fonctions relatives à une entitée logique au même endroit
+(dans le même fichier, ou dans la même section d'un plus gros source).
+C'est juste que la modularisation est indépendente de la façon dont
+les définitions sont enregistrées dans les fichiers. (L'IDE pourrait
+gérer ce problème automatiquement, et stoquer les définitions dans une
+base de donnée ou comme il veut).
+
+
+Finalement, dans le cas du C, on a une certaine collision entre la
+notion de module et la notion de fichier dans la mesure où en C, un
+fichier source défini en plus d'une unité de compilation, un espace de
+nommage, dans lequel on peut définir des types, variables, et
+fonctions qui ne soient pas visible hors de ce fichier (avec le mot
+clé 'static'). (En C++, on utilisarait des namespaces, alors le
+problème serait différent).   Donc on peut finalement se servir des
+fichiers source C pour représenter des modules.
+
+** Pointeurs
+
+Exemple de pointeur sur variables:
+
+#+BEGIN_SRC(c)
+#include <stdio.h>
+#include <stdlib.h>
+int main(){
+    int impairs=0;
+    int pairs=0;
+    int* compteur=0;
+    char buffer[80];
+    while(fgets(buffer,sizeof(buffer),stdin)){
+        int n=atoi(buffer);
+        if(n&1){
+            compteur=&impairs;
+        }else{
+            compteur=&pairs;
+        }
+        ++(*compteur);
+    }
+    printf("impairs : %d\n",impairs);
+    printf("pairs   : %d\n",pairs);
+    return 0;
+}
+#+END_SRC
+
+#+BEGIN_SRC(bash)
+% cc     pointeurs.c   -o pointeurs
+% printf "%d\n" 1 2 3 5 7 11 13 | ./pointeurs
+impairs : 6
+pairs   : 1
+#+END_SRC

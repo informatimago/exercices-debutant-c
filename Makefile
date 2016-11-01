@@ -11,7 +11,7 @@ zip: ../$(ZIPNAME).zip
 
 ../$(ZIPNAME).zip:
 	mkdir $(TMP)/$(ZIPNAME)
-	tar pocf - * | tar -C $(TMP)/$(ZIPNAME)  -xvf -
+	tar pocf - .git * | tar -C $(TMP)/$(ZIPNAME)  -xvf -
 	cd $(TMP) ; zip -r $(ZIPNAME).zip $(ZIPNAME)
 	mv -v $(TMP)/$(ZIPNAME).zip ..
 	rm -rf $(TMP)/$(ZIPNAME)
@@ -26,6 +26,7 @@ PROGRAMS = \
 	notes/arithmetic \
 	notes/scanf-vs-atoi \
 	notes/funbool \
+	notes/scanf \
 	travaux-pratiques/plus-ou-moins
 
 
