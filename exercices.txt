@@ -592,3 +592,25 @@ fin de la liste.
 (last-element '(100 200 300 400 500) 1) --> 500
 (last-element '(100 200 300 400 500) 3) --> 300
 (last-element '(100 200 300 400 500) 4) --> 200
+** Sauts                                              :recursion:vecteurs:XX:
+
+https://programmingpraxis.com/2017/02/03/jump/
+
+Sauts est un simple jeu monojoueur.
+
+Vous êtes au départ sur la première cellule d'un vecteur contenant des
+entiers positifs ou nuls.  À chaque pas, vous pouvez sauter en avant
+dans le vecteur autant de cases que vous voulez entre 0 et le nombre
+dans la cellule courrante.  Vous gagnez si il y a un chemin qui vous
+permet de sauter au delà de la fin du vecteur, sinon vous perdez.  Par
+exemple, si le tableau contient les entiers
+{2, 0, 3, 5, 0, 0, 3, 0, 0, 3, 1, 0}, vous pouvez gagner en sautant de
+la cellule contenant 2 à celle contenant 3, puis celle contenant 5,
+puis la suivante contenant 3, puis la suivante contenant 3 et
+finalement au delà de la fin du vecteur.
+
+Votre missions, si vous l'acceptez, est d'écrire un programme qui
+détermine si un vecteur donné est gagnable.
+
+Pour un bonus, écrivez une variante qui retourne la liste des sauts
+effectués.
